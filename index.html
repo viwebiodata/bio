@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">বায়োডাটা</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0e17; --surface:#1a1928; --card:#22213a;
+  --accent:#e8a838; --accent2:#7c6af7;
+  --text:#fffffe; --muted:#a7a9be; --border:rgba(255,255,255,0.08);
+  --danger:#e05c5c; --success:#4ecb8d;
+  --radius:14px; --shadow:0 8px 40px rgba(0,0,0,0.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(15,14,23,0.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:64px;
+}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent);letter-spacing:1px;cursor:pointer}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{
+  background:none;border:none;color:var(--muted);
+  padding:8px 16px;border-radius:8px;cursor:pointer;
+  font-family:'Hind Siliguri',sans-serif;font-size:.9rem;transition:all .2s;
+}
+.nav-tab:hover{background:var(--card);color:var(--text)}
+.nav-tab.active{background:var(--accent2);color:#fff}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn{
+  padding:8px 18px;border-radius:8px;border:none;
+  font-family:'Hind Siliguri',sans-serif;font-size:.9rem;
+  cursor:pointer;transition:all .2s;font-weight:600;
+}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:#f0b94a;transform:translateY(-1px)}
+.btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#000}
+.btn-sm{padding:5px 13px;font-size:.82rem}
+
+/* PAGES */
+.page{display:none;max-width:960px;margin:0 auto;padding:36px 20px}
+.page.active{display:block}
+#loginPage{
+  display:flex;align-items:center;justify-content:center;
+  min-height:calc(100vh - 64px);max-width:100%;padding:20px;
+}
+
+/* LOGIN */
+.login-box{
+  background:var(--card);border-radius:20px;padding:48px 42px;
+  width:100%;max-width:400px;border:1px solid var(--border);box-shadow:var(--shadow);
+}
+.login-logo{font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--accent);text-align:center;margin-bottom:6px}
+.login-sub{color:var(--muted);text-align:center;margin-bottom:30px;font-size:.92rem}
+.fg{margin-bottom:16px}
+.fg label{display:block;color:var(--muted);font-size:.83rem;margin-bottom:6px;font-weight:500}
+.fg input,.fg textarea,.fg select{
+  width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:9px;padding:11px 14px;color:var(--text);
+  font-family:'Hind Siliguri',sans-serif;font-size:.93rem;outline:none;transition:border-color .2s;
+}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent2)}
+.fg textarea{resize:vertical;min-height:80px}
+.login-err{color:var(--danger);font-size:.84rem;text-align:center;margin-top:10px;display:none}
+
+/* PUBLIC PROFILE */
+.hero{
+  background:linear-gradient(135deg,var(--card) 0%,var(--surface) 100%);
+  border:1px solid var(--border);border-radius:20px;
+  padding:40px;margin-bottom:28px;
+  display:flex;align-items:center;gap:32px;flex-wrap:wrap;
+}
+.avatar{
+  width:120px;height:120px;border-radius:50%;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:3rem;
+  border:3px solid var(--accent);box-shadow:0 0 30px rgba(232,168,56,.25);
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.hero-info h1{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--accent)}
+.hero-info .sub{color:var(--muted);margin-top:6px;font-size:1rem}
+.hero-info .meta{color:var(--muted);font-size:.85rem;margin-top:8px}
+.view-sections{display:flex;flex-direction:column;gap:18px}
+.vs-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.vs-title{
+  padding:14px 22px;background:rgba(124,106,247,.12);
+  border-bottom:1px solid var(--border);font-weight:700;font-size:1rem;
+  color:var(--accent2);display:flex;align-items:center;gap:8px;
+}
+.vs-fields{padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.vs-fields{grid-template-columns:1fr}}
+.vf-label{font-size:.76rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.vf-value{font-size:.96rem;color:var(--text)}
+.empty-state{text-align:center;color:var(--muted);padding:70px 20px}
+.empty-state .ei{font-size:3rem;margin-bottom:12px}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:20px}
+.gi{
+  border-radius:10px;overflow:hidden;aspect-ratio:1;
+  background:var(--card);border:1px solid var(--border);
+  position:relative;cursor:pointer;
+}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.gi:hover img{transform:scale(1.06)}
+.gi-cap{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.8));
+  color:#fff;padding:20px 10px 8px;font-size:.78rem;text-align:center;
+  transform:translateY(100%);transition:transform .3s;
+}
+.gi:hover .gi-cap{transform:translateY(0)}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:680px){.contact-grid{grid-template-columns:1fr}}
+.cfw{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.cfw h3{color:var(--accent);font-size:1.1rem;margin-bottom:18px}
+.drop-zone{
+  border:2px dashed var(--border);border-radius:10px;padding:18px;
+  text-align:center;color:var(--muted);font-size:.88rem;
+  cursor:pointer;transition:border-color .2s;
+}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--accent2);color:var(--text)}
+.file-chip{
+  background:var(--surface);border-radius:6px;padding:5px 10px;margin-top:6px;
+  display:flex;justify-content:space-between;align-items:center;font-size:.82rem;
+}
+.send-status{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.88rem;display:none}
+.send-status.ok{background:rgba(78,203,141,.15);color:var(--success);display:block}
+.send-status.err{background:rgba(224,92,92,.15);color:var(--danger);display:block}
+
+/* ADMIN BUILDER */
+.page-title{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--accent);margin-bottom:6px}
+.page-sub{color:var(--muted);margin-bottom:28px;font-size:.92rem}
+.sections-list{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sc-header{
+  display:flex;align-items:center;gap:10px;padding:14px 18px;
+  cursor:pointer;border-bottom:1px solid var(--border);user-select:none;
+}
+.sc-header:hover{background:rgba(255,255,255,.03)}
+.sc-name{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:1rem;font-weight:600;
+}
+.sc-toggle{color:var(--muted);font-size:1rem;transition:transform .3s}
+.sc-toggle.open{transform:rotate(180deg)}
+.sc-body{padding:16px 18px;display:none}
+.sc-body.open{display:block}
+.fields-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.field-row{
+  display:flex;align-items:flex-start;gap:8px;
+  background:var(--surface);border-radius:9px;padding:11px 12px;border:1px solid var(--border);
+}
+.field-inner{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field-inner input{
+  background:var(--card);border:1px solid var(--border);border-radius:7px;
+  padding:8px 11px;color:var(--text);font-family:'Hind Siliguri',sans-serif;
+  font-size:.88rem;outline:none;width:100%;
+}
+.field-inner input:focus{border-color:var(--accent)}
+.field-inner input.full{grid-column:1/-1}
+.remove-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:1rem;padding:3px 6px;border-radius:5px;transition:background .2s}
+.remove-btn:hover{background:rgba(224,92,92,.15)}
+.add-field-btn{
+  background:rgba(124,106,247,.12);color:var(--accent2);
+  border:1px dashed var(--accent2);border-radius:7px;
+  padding:7px 15px;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
+  font-size:.85rem;font-weight:600;transition:all .2s;
+}
+.add-field-btn:hover{background:rgba(124,106,247,.22)}
+.add-section-bar{
+  background:var(--card);border:2px dashed var(--accent);
+  border-radius:var(--radius);padding:18px 22px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.add-section-bar input{
+  flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:10px 13px;color:var(--text);
+  font-family:'Hind Siliguri',sans-serif;font-size:.93rem;outline:none;
+}
+.add-section-bar input:focus{border-color:var(--accent)}
+.config-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;margin-bottom:24px;
+}
+.config-box h3{color:var(--accent);margin-bottom:16px;font-size:1rem}
+.config-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.config-row .fg{flex:1;min-width:200px;margin-bottom:0}
+.tag-badge{
+  display:inline-block;background:rgba(232,168,56,.15);color:var(--accent);
+  border-radius:5px;padding:2px 9px;font-size:.74rem;font-weight:600;margin-left:8px;
+}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{
+  position:fixed;bottom:26px;right:26px;z-index:9999;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:13px 18px;max-width:320px;box-shadow:var(--shadow);font-size:.88rem;
+  transform:translateY(100px);opacity:0;transition:all .3s;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-left:3px solid var(--success)}
+.toast.err{border-left:3px solid var(--danger)}
+.note{color:var(--muted);font-size:.82rem;margin-top:5px}
+pre{background:var(--bg);border-radius:7px;padding:10px;overflow-x:auto;color:var(--accent);font-size:.78rem;white-space:pre-wrap;word-break:break-all}
+.guide-box{background:var(--surface);border-radius:10px;padding:16px;font-size:.83rem;color:var(--muted);line-height:1.8;margin-top:14px;display:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="goHome()">✦ বায়োডাটা</div>
+  <div class="nav-tabs" id="publicTabs">
+    <button class="nav-tab active" onclick="showPage('viewPage',this)">👁 প্রোফাইল</button>
+    <button class="nav-tab" onclick="showPage('galleryPage',this)">🖼 গ্যালারি</button>
+    <button class="nav-tab" onclick="showPage('contactPage',this)">✉️ যোগাযোগ</button>
+  </div>
+  <div class="nav-tabs" id="adminTabs" style="display:none">
+    <button class="nav-tab" onclick="showAdminPage('builderPage',this)">✏️ সম্পাদনা</button>
+    <button class="nav-tab" onclick="showAdminPage('adminGalleryPage',this)">🖼 গ্যালারি সেটিং</button>
+    <button class="nav-tab" onclick="showAdminPage('adminContactPage',this)">✉️ ফর্ম সেটিং</button>
+    <button class="nav-tab" onclick="showAdminPage('settingsPage',this)">⚙️ সেটিংস</button>
+  </div>
+  <div class="nav-actions">
+    <span id="adminBadge" style="display:none;color:var(--accent);font-size:.82rem;font-weight:600">🔑 অ্যাডমিন</span>
+    <button class="btn btn-ghost btn-sm" id="adminToggleBtn" onclick="openLoginModal()">🔐 অ্যাডমিন</button>
+    <button class="btn btn-ghost btn-sm" id="logoutBtn" style="display:none" onclick="logout()">লগআউট</button>
+  </div>
+</nav>
+
+<!-- PUBLIC: PROFILE VIEW -->
+<div id="viewPage" class="page active">
+  <div class="hero">
+    <div class="avatar" id="heroAvatar">😊</div>
+    <div class="hero-info">
+      <h1 id="heroName">লোড হচ্ছে...</h1>
+      <p class="sub" id="heroSub"></p>
+      <p class="meta" id="heroMeta"></p>
+    </div>
+  </div>
+  <div class="view-sections" id="viewSections">
+    <div class="empty-state"><div class="ei">📝</div><p>বায়োডাটা তৈরি করা হয়নি।</p></div>
+  </div>
+</div>
+
+<!-- PUBLIC: GALLERY -->
+<div id="galleryPage" class="page">
+  <h1 class="page-title">ফটো গ্যালারি</h1>
+  <div id="galleryGrid" class="gallery-grid"></div>
+  <div id="galleryEmpty" class="empty-state"><div class="ei">🖼️</div><p>এখনো কোনো ছবি নেই।</p></div>
+</div>
+
+<!-- PUBLIC: CONTACT -->
+<div id="contactPage" class="page">
+  <h1 class="page-title">যোগাযোগ করুন</h1>
+  <p class="page-sub">বার্তা পাঠান — সরাসরি জমা হয়ে যাবে।</p>
+  <div class="contact-grid">
+    <div class="cfw">
+      <h3>✉️ বার্তা লিখুন</h3>
+      <div class="fg"><label>আপনার নাম *</label><input type="text" id="cf_name" placeholder="পূর্ণ নাম"></div>
+      <div class="fg"><label>ইমেইল *</label><input type="email" id="cf_email" placeholder="email@example.com"></div>
+      <div class="fg"><label>বার্তা *</label><textarea id="cf_message" rows="5" placeholder="আপনার বার্তা..."></textarea></div>
+      <div class="fg">
+        <label>ফাইল / ছবি (ঐচ্ছিক)</label>
+        <div class="drop-zone" id="dropZone"
+          onclick="document.getElementById('fileInput').click()"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleDrop(event)">
+          📎 ক্লিক করুন বা ফাইল টেনে আনুন
+        </div>
+        <input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)">
+        <div id="fileList"></div>
+      </div>
+      <button class="btn btn-primary" onclick="submitContact()" style="width:100%;padding:12px;font-size:1rem">📨 পাঠান</button>
+      <div class="send-status" id="sendStatus"></div>
+    </div>
+    <div style="color:var(--muted);padding:20px 0">
+      <div style="font-size:2rem;margin-bottom:12px">💬</div>
+      <p style="line-height:1.8;font-size:.93rem">আপনার বার্তা, মতামত বা যোগাযোগের প্রস্তাব পাঠাতে ফর্মটি পূরণ করুন।</p>
+      <div id="contactOwnerInfo" style="margin-top:20px;font-size:.9rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+  <div class="login-box" style="position:relative">
+    <button onclick="closeLoginModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;line-height:1">✕</button>
+    <div class="login-logo">🔐</div>
+    <div class="login-sub">অ্যাডমিন প্যানেল</div>
+    <div class="fg"><label>ইউজারনেম</label><input type="text" id="lu" placeholder="ইউজারনেম"></div>
+    <div class="fg"><label>পাসওয়ার্ড</label><input type="password" id="lp" placeholder="পাসওয়ার্ড" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" onclick="doLogin()" style="width:100%;padding:12px;font-size:1rem;margin-top:6px">লগইন</button>
+    <div class="login-err" id="loginErr">❌ ভুল তথ্য</div>
+    <p style="color:var(--muted);font-size:.78rem;text-align:center;margin-top:16px">ডিফল্ট: <b>admin</b> / <b>admin123</b></p>
+  </div>
+</div>
+
+<!-- ADMIN: BUILDER -->
+<div id="builderPage" class="page">
+  <h1 class="page-title">বায়োডাটা সম্পাদনা</h1>
+  <p class="page-sub">সেকশন যোগ করুন, ক্লিক করে খুলুন, ফিল্ড লিখুন।</p>
+  <div class="sections-list" id="sectionsList"></div>
+  <div class="add-section-bar">
+    <span style="font-size:1.1rem">➕</span>
+    <input type="text" id="newSectionName" placeholder="নতুন সেকশনের নাম (যেমন: কর্মক্ষেত্র)" onkeydown="if(event.key==='Enter')addSection()">
+    <button class="btn btn-primary" onclick="addSection()">সেকশন যোগ করুন</button>
+  </div>
+  <div style="margin-top:24px;text-align:right">
+    <button class="btn btn-success" onclick="saveData()">💾 সংরক্ষণ ও প্রকাশ করুন</button>
+  </div>
+</div>
+
+<!-- ADMIN: GALLERY SETTINGS -->
+<div id="adminGalleryPage" class="page">
+  <h1 class="page-title">গ্যালারি সেটিংস</h1>
+  <div class="config-box">
+    <h3>🖼 Google Drive ফোল্ডার</h3>
+    <div class="config-row">
+      <div class="fg">
+        <label>Folder ID</label>
+        <input type="text" id="driveFolderId" placeholder="ফোল্ডারের ID">
+        <p class="note">URL: drive.google.com/drive/folders/<b>এটুকু_কপি_করুন</b></p>
+      </div>
+      <div class="fg">
+        <label>Google API Key</label>
+        <input type="text" id="driveApiKey" placeholder="AIza...">
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveGalleryConfig()">💾 সংরক্ষণ করুন</button>
+      <button class="btn btn-ghost btn-sm" onclick="testGallery()">🔍 পরীক্ষা করুন</button>
+    </div>
+    <div style="margin-top:14px;color:var(--muted);font-size:.83rem">
+      ℹ️ ফোল্ডার → Share → <b>Anyone with the link → Viewer</b> করুন।<br>
+      API Key: <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--accent2)">Google Cloud Console</a> → Drive API সক্রিয় করুন।
+    </div>
+  </div>
+  <div id="galleryTestResult"></div>
+</div>
+
+<!-- ADMIN: CONTACT SETTINGS -->
+<div id="adminContactPage" class="page">
+  <h1 class="page-title">যোগাযোগ ফর্ম সেটিংস</h1>
+  <div class="config-box">
+    <h3>📋 Google Sheet সংযোগ</h3>
+    <div class="fg"><label>Google Apps Script Web App URL</label><input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+    <div class="fg"><label>আপনার পরিচয় তথ্য (ঐচ্ছিক — Contact পাতায় দেখাবে)</label><input type="text" id="ownerInfo" placeholder="যেমন: 📍 ঢাকা | 📞 +880..."></div>
+    <button class="btn btn-primary btn-sm" onclick="saveContactConfig()">💾 সংরক্ষণ</button>
+    <button class="btn btn-ghost btn-sm" onclick="toggleGuide('gsGuide')" style="margin-left:8px">📖 Apps Script গাইড</button>
+    <div class="guide-box" id="gsGuide">
+      <b style="color:var(--text)">Apps Script সেটআপ (৫ মিনিট):</b><br>
+      ১. আপনার Google Sheet খুলুন<br>
+      ২. <b>Extensions → Apps Script</b> ক্লিক করুন<br>
+      ৩. <b>code.gs</b> ফাইলে এই রেপোর <code>code.gs</code> কোড পেস্ট করুন<br>
+      ৪. উপরে <b>SHEET_ID</b> আপনার Sheet এর ID দিন<br>
+      ৫. <b>Deploy → New Deployment → Web App</b><br>
+      &nbsp;&nbsp;&nbsp;• Execute as: <b>Me</b><br>
+      &nbsp;&nbsp;&nbsp;• Who has access: <b>Anyone</b><br>
+      ৬. URL কপি করে উপরে পেস্ট করুন<br><br>
+      <b style="color:var(--text)">Sheet ID কোথায়?</b><br>
+      <code>docs.google.com/spreadsheets/d/<b>এটাই_ID</b>/edit</code>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN: SETTINGS -->
+<div id="settingsPage" class="page">
+  <h1 class="page-title">সেটিংস</h1>
+  <div class="config-box" style="margin-bottom:18px">
+    <h3>👤 প্রোফাইল তথ্য</h3>
+    <div class="fg"><label>পূর্ণ নাম</label><input type="text" id="s_name" placeholder="আপনার নাম"></div>
+    <div class="fg"><label>পেশা / পরিচয়</label><input type="text" id="s_sub" placeholder="শিক্ষার্থী, ঢাকা বিশ্ববিদ্যালয়"></div>
+    <div class="fg"><label>ঠিকানা / ফোন / অতিরিক্ত</label><input type="text" id="s_meta" placeholder="ঢাকা | +880..."></div>
+    <div class="fg"><label>প্রোফাইল ছবি URL</label><input type="text" id="s_photo" placeholder="https://...jpg"></div>
+  </div>
+  <div class="config-box" style="margin-bottom:18px">
+    <h3>🔐 লগইন পরিবর্তন</h3>
+    <div class="fg"><label>নতুন ইউজারনেম</label><input type="text" id="s_user"></div>
+    <div class="fg"><label>নতুন পাসওয়ার্ড</label><input type="password" id="s_pass" placeholder="খালি রাখলে পরিবর্তন হবে না"></div>
+  </div>
+  <button class="btn btn-success" onclick="saveSettings()">💾 সংরক্ষণ করুন</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+const DEFAULT = {
+  auth:    { user:'admin', pass:'admin123' },
+  profile: { name:'', sub:'', meta:'', photo:'' },
+  sections:[],
+  gallery: { folderId:'18FzPNHHfNmgFrw1ApRoHMzFnVnKMbCLm', apiKey:'' },
+  contact: { scriptUrl:'', ownerInfo:'' }
+};
+let S = JSON.parse(JSON.stringify(DEFAULT));
+let isAdmin = false;
+let selectedFiles = [];
+
+function loadState(){
+  try{const d=localStorage.getItem('bd2');if(d)S={...S,...JSON.parse(d)};}catch(e){}
+}
+function saveState(){
+  try{localStorage.setItem('bd2',JSON.stringify(S));}catch(e){}
+}
+loadState();
+
+// ══════════════════════════════════════════════
+//  AUTH & MODAL
+// ══════════════════════════════════════════════
+function openLoginModal(){
+  const m=document.getElementById('loginModal');
+  m.style.display='flex';
+  document.getElementById('loginErr').style.display='none';
+  document.getElementById('lu').value='';
+  document.getElementById('lp').value='';
+  setTimeout(()=>document.getElementById('lu').focus(),50);
+}
+function closeLoginModal(){
+  document.getElementById('loginModal').style.display='none';
+}
+// ESC key closes modal
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLoginModal(); });
+// click outside modal box closes it
+document.getElementById('loginModal').addEventListener('click',function(e){
+  if(e.target===this) closeLoginModal();
+});
+
+function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  if(u===S.auth.user && p===S.auth.pass){
+    isAdmin=true;
+    closeLoginModal();
+    document.getElementById('loginErr').style.display='none';
+    document.getElementById('adminTabs').style.display='flex';
+    document.getElementById('adminBadge').style.display='inline';
+    document.getElementById('adminToggleBtn').style.display='none';
+    document.getElementById('logoutBtn').style.display='block';
+    showAdminPage('builderPage',null);
+    renderBuilder();
+    loadAdminInputs();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+    document.getElementById('lp').value='';
+    document.getElementById('lp').focus();
+  }
+}
+function logout(){
+  isAdmin=false;
+  document.getElementById('adminTabs').style.display='none';
+  document.getElementById('adminBadge').style.display='none';
+  document.getElementById('adminToggleBtn').style.display='block';
+  document.getElementById('logoutBtn').style.display='none';
+  showPage('viewPage',document.querySelector('#publicTabs .nav-tab'));
+}
+function goHome(){
+  if(isAdmin) showAdminPage('builderPage',null);
+  else showPage('viewPage',document.querySelector('#publicTabs .nav-tab'));
+}
+
+// ══════════════════════════════════════════════
+//  PAGE ROUTING
+// ══════════════════════════════════════════════
+const PUBLIC_PAGES=['viewPage','galleryPage','contactPage'];
+const ADMIN_PAGES=['builderPage','adminGalleryPage','adminContactPage','settingsPage','loginPage'];
+
+function showPage(id, btn){
+  [...document.querySelectorAll('.page')].forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  [...document.querySelectorAll('#publicTabs .nav-tab')].forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(id==='viewPage') renderView();
+  if(id==='galleryPage') renderPublicGallery();
+  if(id==='contactPage') renderContactInfo();
+}
+function showAdminPage(id, btn){
+  [...document.querySelectorAll('.page')].forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  [...document.querySelectorAll('#adminTabs .nav-tab')].forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(id==='builderPage') renderBuilder();
+  if(id==='adminGalleryPage') loadAdminInputs();
+  if(id==='adminContactPage') loadAdminInputs();
+  if(id==='settingsPage') loadAdminInputs();
+}
+
+// ══════════════════════════════════════════════
+//  PUBLIC PROFILE VIEW
+// ══════════════════════════════════════════════
+function renderView(){
+  const p=S.profile;
+  document.getElementById('heroName').textContent = p.name||'বায়োডাটা';
+  document.getElementById('heroSub').textContent  = p.sub||'';
+  document.getElementById('heroMeta').textContent = p.meta||'';
+  document.title = p.name ? p.name+' — বায়োডাটা' : 'বায়োডাটা';
+  const av=document.getElementById('heroAvatar');
+  av.innerHTML = p.photo
+    ? `<img src="${p.photo}" onerror="this.parentElement.textContent='😊'">`
+    : '😊';
+  const vs=document.getElementById('viewSections');
+  const filled=S.sections.filter(s=>s.fields.some(f=>f.label||f.value));
+  if(!filled.length){
+    vs.innerHTML=`<div class="empty-state"><div class="ei">📝</div><p>বায়োডাটা তৈরি করা হয়নি।</p></div>`;
+    return;
+  }
+  vs.innerHTML=filled.map(sec=>`
+    <div class="vs-card">
+      <div class="vs-title">${sec.icon} ${esc(sec.name)}</div>
+      <div class="vs-fields">
+        ${sec.fields.filter(f=>f.label||f.value).map(f=>`
+          <div>
+            <div class="vf-label">${esc(f.label)}</div>
+            <div class="vf-value">${esc(f.value)||'—'}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+//  PUBLIC GALLERY
+// ══════════════════════════════════════════════
+async function renderPublicGallery(){
+  const grid=document.getElementById('galleryGrid');
+  const empty=document.getElementById('galleryEmpty');
+  const {folderId,apiKey}=S.gallery;
+  if(!folderId||!apiKey){
+    grid.innerHTML='';
+    empty.style.display='block';
+    empty.innerHTML='<div class="ei">🖼️</div><p>গ্যালারি এখনো সেট করা হয়নি।</p>';
+    return;
+  }
+  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px"><div class="spinner"></div></div>';
+  empty.style.display='none';
+  await fetchGallery(folderId,apiKey,grid,empty);
+}
+
+async function fetchGallery(fid,apiKey,grid,empty){
+  try{
+    const realId=fid.includes('/folders/')? fid.split('/folders/')[1].split('?')[0].split('/')[0]: fid;
+    const url=`https://www.googleapis.com/drive/v3/files?q='${realId}'+in+parents+and+mimeType+contains+'image/'&key=${apiKey}&fields=files(id,name,thumbnailLink)&pageSize=50`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message);
+    const files=data.files||[];
+    if(!files.length){
+      grid.innerHTML='';
+      empty.style.display='block';
+      empty.innerHTML='<div class="ei">🖼️</div><p>ফোল্ডারে ছবি নেই।</p>';
+      return;
+    }
+    grid.innerHTML=files.map(f=>`
+      <div class="gi" onclick="window.open('https://drive.google.com/file/d/${f.id}/view','_blank')">
+        <img src="${f.thumbnailLink||`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`}"
+          loading="lazy"
+          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%2322213a%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2240%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🖼️</text></svg>'">
+        <div class="gi-cap">${esc(f.name)}</div>
+      </div>`).join('');
+  }catch(e){
+    grid.innerHTML='';
+    empty.style.display='block';
+    empty.innerHTML=`<div class="ei">⚠️</div><p>${e.message}</p>`;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  CONTACT
+// ══════════════════════════════════════════════
+function renderContactInfo(){
+  const el=document.getElementById('contactOwnerInfo');
+  el.textContent=S.contact.ownerInfo||'';
+}
+function handleFiles(files){for(const f of files) selectedFiles.push(f);renderFileList();}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  handleFiles(e.dataTransfer.files);
+}
+function renderFileList(){
+  document.getElementById('fileList').innerHTML=selectedFiles.map((f,i)=>`
+    <div class="file-chip">
+      <span>📎 ${esc(f.name)} (${(f.size/1024).toFixed(1)} KB)</span>
+      <button onclick="selectedFiles.splice(${i},1);renderFileList()" style="background:none;border:none;color:var(--danger);cursor:pointer">✕</button>
+    </div>`).join('');
+}
+async function submitContact(){
+  const name=document.getElementById('cf_name').value.trim();
+  const email=document.getElementById('cf_email').value.trim();
+  const message=document.getElementById('cf_message').value.trim();
+  const url=S.contact.scriptUrl;
+  const st=document.getElementById('sendStatus');
+  if(!name||!email||!message){toast('❌ নাম, ইমেইল ও বার্তা আবশ্যক','err');return;}
+  if(!url){toast('❌ Apps Script URL সেট করা নেই','err');return;}
+  st.className='send-status';st.style.display='block';
+  st.innerHTML='<span class="spinner"></span> পাঠানো হচ্ছে...';
+  const fi=selectedFiles.map(f=>f.name).join(', ');
+  const params=new URLSearchParams({name,email,message,fileInfo:fi});
+  try{
+    await fetch(url+'?'+params,{method:'GET',mode:'no-cors'});
+    st.className='send-status ok';
+    st.innerHTML='✅ বার্তা পাঠানো হয়েছে! ধন্যবাদ।';
+    document.getElementById('cf_name').value='';
+    document.getElementById('cf_email').value='';
+    document.getElementById('cf_message').value='';
+    selectedFiles=[];renderFileList();
+  }catch(e){
+    st.className='send-status err';
+    st.innerHTML='❌ ব্যর্থ: '+e.message;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  ADMIN: BUILDER
+// ══════════════════════════════════════════════
+const ICONS=['📚','👨‍👩‍👧','💼','⭐','🏆','💡','🌍','🎯','✍️','🏅','🤝','📋','🎨','🏃','🍳'];
+let iconIdx=0;
+
+function addSection(){
+  const inp=document.getElementById('newSectionName');
+  const name=inp.value.trim();
+  if(!name)return;
+  S.sections.push({id:Date.now(),icon:ICONS[iconIdx++%ICONS.length],name,fields:[]});
+  inp.value='';
+  renderBuilder();
+}
+function removeSection(id){S.sections=S.sections.filter(s=>s.id!==id);renderBuilder();}
+function addField(sid){
+  const sec=S.sections.find(s=>s.id===sid);
+  if(sec) sec.fields.push({id:Date.now(),label:'',value:''});
+  renderBuilder();
+  setTimeout(()=>openSection(sid),30);
+}
+function removeField(sid,fid){
+  const sec=S.sections.find(s=>s.id===sid);
+  if(sec) sec.fields=sec.fields.filter(f=>f.id!==fid);
+  renderBuilder();
+  setTimeout(()=>openSection(sid),30);
+}
+function openSection(sid){
+  const card=document.querySelector(`[data-sid="${sid}"]`);
+  if(!card)return;
+  card.querySelector('.sc-body').classList.add('open');
+  card.querySelector('.sc-toggle').classList.add('open');
+}
+function toggleSection(sid){
+  const card=document.querySelector(`[data-sid="${sid}"]`);
+  card.querySelector('.sc-body').classList.toggle('open');
+  card.querySelector('.sc-toggle').classList.toggle('open');
+}
+function renderBuilder(){
+  const list=document.getElementById('sectionsList');
+  list.innerHTML='';
+  S.sections.forEach(sec=>{
+    const card=document.createElement('div');
+    card.className='sc';card.dataset.sid=sec.id;
+    card.innerHTML=`
+      <div class="sc-header" onclick="toggleSection(${sec.id})">
+        <span style="font-size:1.1rem">${sec.icon}</span>
+        <input class="sc-name" value="${esc(sec.name)}"
+          onclick="event.stopPropagation()"
+          oninput="S.sections.find(s=>s.id===${sec.id}).name=this.value"
+          placeholder="সেকশনের নাম">
+        <span class="tag-badge">${sec.fields.length}টি ফিল্ড</span>
+        <span class="sc-toggle">▾</span>
+      </div>
+      <div class="sc-body">
+        <div class="fields-list">
+          ${sec.fields.map(f=>`
+            <div class="field-row" data-fid="${f.id}">
+              <div class="field-inner">
+                <input class="full" placeholder="ফিল্ড লেবেল (যেমন: স্কুলের নাম)"
+                  value="${esc(f.label)}"
+                  oninput="updateField(${sec.id},${f.id},'label',this.value)">
+                <input class="full" placeholder="বিবরণ / মান"
+                  value="${esc(f.value)}"
+                  oninput="updateField(${sec.id},${f.id},'value',this.value)">
+              </div>
+              <button class="remove-btn" onclick="removeField(${sec.id},${f.id})">✕</button>
+            </div>`).join('')||'<p style="color:var(--muted);font-size:.86rem">এখনো কোনো ফিল্ড নেই।</p>'}
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="add-field-btn" onclick="addField(${sec.id})">+ ফিল্ড যোগ করুন</button>
+          <button class="btn btn-danger btn-sm" onclick="removeSection(${sec.id})">🗑 মুছুন</button>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+function updateField(sid,fid,key,val){
+  const sec=S.sections.find(s=>s.id===sid);
+  if(sec){const f=sec.fields.find(f=>f.id===fid);if(f)f[key]=val;}
+}
+function saveData(){
+  // collect all live inputs
+  S.sections.forEach(sec=>{
+    const card=document.querySelector(`[data-sid="${sec.id}"]`);
+    if(!card)return;
+    sec.name=card.querySelector('.sc-name').value;
+    sec.fields.forEach(f=>{
+      const row=card.querySelector(`[data-fid="${f.id}"]`);
+      if(!row)return;
+      const ins=row.querySelectorAll('input');
+      f.label=ins[0]?.value||'';f.value=ins[1]?.value||'';
+    });
+  });
+  saveState();
+  toast('✅ সংরক্ষণ ও প্রকাশ সফল হয়েছে!','ok');
+}
+
+// ══════════════════════════════════════════════
+//  ADMIN: GALLERY CONFIG
+// ══════════════════════════════════════════════
+function saveGalleryConfig(){
+  S.gallery.folderId=document.getElementById('driveFolderId').value.trim();
+  S.gallery.apiKey=document.getElementById('driveApiKey').value.trim();
+  saveState();toast('✅ গ্যালারি সেটিংস সংরক্ষণ হয়েছে','ok');
+}
+async function testGallery(){
+  const fid=document.getElementById('driveFolderId').value.trim();
+  const apiKey=document.getElementById('driveApiKey').value.trim();
+  if(!fid||!apiKey){toast('❌ উভয় ফিল্ড পূরণ করুন','err');return;}
+  const res=document.getElementById('galleryTestResult');
+  res.innerHTML='<p style="color:var(--muted);margin-top:12px"><span class="spinner"></span> পরীক্ষা করা হচ্ছে...</p>';
+  const grid=document.createElement('div');grid.className='gallery-grid';
+  const empty=document.createElement('div');empty.className='empty-state';
+  res.appendChild(grid);res.appendChild(empty);
+  await fetchGallery(fid,apiKey,grid,empty);
+}
+
+// ══════════════════════════════════════════════
+//  ADMIN: CONTACT CONFIG
+// ══════════════════════════════════════════════
+function saveContactConfig(){
+  S.contact.scriptUrl=document.getElementById('scriptUrl').value.trim();
+  S.contact.ownerInfo=document.getElementById('ownerInfo').value.trim();
+  saveState();toast('✅ যোগাযোগ সেটিংস সংরক্ষণ হয়েছে','ok');
+}
+function toggleGuide(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+// ══════════════════════════════════════════════
+//  ADMIN: SETTINGS
+// ══════════════════════════════════════════════
+function loadAdminInputs(){
+  const p=S.profile;
+  setVal('s_name',p.name);setVal('s_sub',p.sub);
+  setVal('s_meta',p.meta);setVal('s_photo',p.photo);
+  setVal('s_user',S.auth.user);setVal('s_pass','');
+  setVal('driveFolderId',S.gallery.folderId);
+  setVal('driveApiKey',S.gallery.apiKey);
+  setVal('scriptUrl',S.contact.scriptUrl);
+  setVal('ownerInfo',S.contact.ownerInfo);
+}
+function saveSettings(){
+  S.profile.name  = getVal('s_name');
+  S.profile.sub   = getVal('s_sub');
+  S.profile.meta  = getVal('s_meta');
+  S.profile.photo = getVal('s_photo');
+  const nu=getVal('s_user'); if(nu) S.auth.user=nu;
+  const np=getVal('s_pass'); if(np) S.auth.pass=np;
+  saveState();renderView();
+  toast('✅ সেটিংস সংরক্ষণ হয়েছে','ok');
+}
+function getVal(id){return document.getElementById(id)?.value||''}
+function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v||'';}
+
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+// Seed demo sections if empty
+if(!S.sections.length){
+  S.sections=[
+    {id:1,icon:'📚',name:'শিক্ষাগত তথ্য',fields:[
+      {id:11,label:'স্কুলের নাম',value:''},
+      {id:12,label:'ঠিকানা',value:''},
+      {id:13,label:'পাশের সাল',value:''},
+      {id:14,label:'বিষয়/বিভাগ',value:''},
+    ]},
+    {id:2,icon:'👨‍👩‍👧',name:'পারিবারিক তথ্য',fields:[
+      {id:21,label:'পিতার নাম',value:''},
+      {id:22,label:'মাতার নাম',value:''},
+      {id:23,label:'ভাই-বোন',value:''},
+    ]},
+    {id:3,icon:'💼',name:'কর্মক্ষেত্র',fields:[
+      {id:31,label:'প্রতিষ্ঠানের নাম',value:''},
+      {id:32,label:'পদবি',value:''},
+      {id:33,label:'যোগদানের সাল',value:''},
+    ]},
+  ];
+  saveState();
+}
+renderView();
+</script>
+</body>
+</html>
