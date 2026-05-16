@@ -2,822 +2,810 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">বায়োডাটা</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>বায়োডাটা প্ল্যাটফর্ম</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
 <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f0e17; --surface:#1a1928; --card:#22213a;
-  --accent:#e8a838; --accent2:#7c6af7;
-  --text:#fffffe; --muted:#a7a9be; --border:rgba(255,255,255,0.08);
-  --danger:#e05c5c; --success:#4ecb8d;
-  --radius:14px; --shadow:0 8px 40px rgba(0,0,0,0.4);
+  --gold:#f0c060;--g2:#fde8a0;--g3:#b87010;--glow:rgba(240,192,96,.4);
+  --teal:#5ee7d0;--red:#ff6b6b;--bg:#040911;
+  --s:rgba(255,255,255,.055);--s2:rgba(255,255,255,.1);
+  --b:rgba(255,255,255,.13);--bg2:rgba(240,192,96,.18);
+  --tx:#eef2ff;--mt:rgba(238,242,255,.55);
+  --blur:blur(18px);--r:18px;--nav:58px;--grid:rgba(240,192,96,.03);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:50px 50px}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.42;animation:of 22s ease-in-out infinite}
+.o1{width:600px;height:500px;background:radial-gradient(circle,#1a3a7e,transparent 70%);top:-10%;left:-8%}
+.o2{width:700px;height:550px;background:radial-gradient(circle,#0d4a3a,transparent 70%);bottom:-15%;right:-10%;animation-delay:-9s;animation-duration:26s}
+.o3{width:450px;height:380px;background:radial-gradient(circle,#3a1060,transparent 70%);top:40%;left:45%;animation-delay:-4s;animation-duration:20s}
+@keyframes of{0%,100%{transform:translate(0,0)}40%{transform:translate(40px,-30px)}70%{transform:translate(-25px,40px)}}
+.wrap{position:relative;z-index:1}
 
 /* NAV */
-nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(15,14,23,0.94);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;height:64px;
-}
-.nav-brand{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent);letter-spacing:1px;cursor:pointer}
-.nav-tabs{display:flex;gap:4px}
-.nav-tab{
-  background:none;border:none;color:var(--muted);
-  padding:8px 16px;border-radius:8px;cursor:pointer;
-  font-family:'Hind Siliguri',sans-serif;font-size:.9rem;transition:all .2s;
-}
-.nav-tab:hover{background:var(--card);color:var(--text)}
-.nav-tab.active{background:var(--accent2);color:#fff}
-.nav-actions{display:flex;gap:10px;align-items:center}
-.btn{
-  padding:8px 18px;border-radius:8px;border:none;
-  font-family:'Hind Siliguri',sans-serif;font-size:.9rem;
-  cursor:pointer;transition:all .2s;font-weight:600;
-}
-.btn-primary{background:var(--accent);color:#000}
-.btn-primary:hover{background:#f0b94a;transform:translateY(-1px)}
-.btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
-.btn-ghost:hover{background:var(--surface)}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-success{background:var(--success);color:#000}
-.btn-sm{padding:5px 13px;font-size:.82rem}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);
+  padding:0 max(1.1rem,env(safe-area-inset-left));
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  background:rgba(4,9,17,.8);border-bottom:1px solid var(--b)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;
+  color:var(--gold);letter-spacing:2px;text-decoration:none;white-space:nowrap}
+.nav-r{display:flex;align-items:center;gap:.45rem;flex-wrap:nowrap}
+#ng{display:flex;align-items:center;gap:.45rem}
+#nu{display:none;align-items:center;gap:.45rem}
+#nu-name{font-size:.8rem;color:var(--mt);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* PAGES */
-.page{display:none;max-width:960px;margin:0 auto;padding:36px 20px}
-.page.active{display:block}
-#loginPage{
-  display:flex;align-items:center;justify-content:center;
-  min-height:calc(100vh - 64px);max-width:100%;padding:20px;
-}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1.1rem;border-radius:50px;
+  font-size:.83rem;font-weight:600;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
+  border:none;text-decoration:none;transition:all .25s cubic-bezier(.34,1.56,.64,1);min-height:36px;white-space:nowrap}
+.btn-g{background:linear-gradient(135deg,#f7d060,var(--gold),var(--g3));color:#1a0800;box-shadow:0 3px 14px var(--glow)}
+.btn-g:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 7px 26px var(--glow)}
+.btn-o{background:var(--s);border:1.5px solid var(--b);color:var(--tx);backdrop-filter:var(--blur)}
+.btn-o:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px)}
+.btn-r{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:var(--red)}
+.btn-r:hover{background:rgba(255,107,107,.22)}
+.btn-sm{padding:.33rem .8rem;font-size:.78rem;min-height:32px;border-radius:9px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
-/* LOGIN */
-.login-box{
-  background:var(--card);border-radius:20px;padding:48px 42px;
-  width:100%;max-width:400px;border:1px solid var(--border);box-shadow:var(--shadow);
-}
-.login-logo{font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--accent);text-align:center;margin-bottom:6px}
-.login-sub{color:var(--muted);text-align:center;margin-bottom:30px;font-size:.92rem}
-.fg{margin-bottom:16px}
-.fg label{display:block;color:var(--muted);font-size:.83rem;margin-bottom:6px;font-weight:500}
-.fg input,.fg textarea,.fg select{
-  width:100%;background:var(--surface);border:1px solid var(--border);
-  border-radius:9px;padding:11px 14px;color:var(--text);
-  font-family:'Hind Siliguri',sans-serif;font-size:.93rem;outline:none;transition:border-color .2s;
-}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent2)}
-.fg textarea{resize:vertical;min-height:80px}
-.login-err{color:var(--danger);font-size:.84rem;text-align:center;margin-top:10px;display:none}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:calc(var(--nav)+2rem) 1.2rem 3rem;text-align:center}
+.hero-in{max-width:660px;width:100%}
+.htag{display:inline-block;padding:.3rem .9rem;border-radius:50px;
+  background:rgba(240,192,96,.1);border:1px solid rgba(240,192,96,.22);
+  color:var(--gold);font-size:.79rem;font-weight:600;margin-bottom:1.3rem;letter-spacing:.4px}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.1rem,7vw,3.5rem);font-weight:700;line-height:1.15;margin-bottom:.85rem}
+.grad{background:linear-gradient(135deg,var(--g2),var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hsub{color:var(--mt);font-size:.94rem;line-height:1.85;margin-bottom:1.7rem;max-width:490px;margin-inline:auto}
+.hbtns{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+.stats{display:flex;gap:1.8rem;justify-content:center;flex-wrap:wrap}
+.stn{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--gold);line-height:1}
+.stl{font-size:.74rem;color:var(--mt);margin-top:.15rem}
 
-/* PUBLIC PROFILE */
-.hero{
-  background:linear-gradient(135deg,var(--card) 0%,var(--surface) 100%);
-  border:1px solid var(--border);border-radius:20px;
-  padding:40px;margin-bottom:28px;
-  display:flex;align-items:center;gap:32px;flex-wrap:wrap;
-}
-.avatar{
-  width:120px;height:120px;border-radius:50%;flex-shrink:0;overflow:hidden;
-  background:linear-gradient(135deg,var(--accent2),var(--accent));
-  display:flex;align-items:center;justify-content:center;font-size:3rem;
-  border:3px solid var(--accent);box-shadow:0 0 30px rgba(232,168,56,.25);
-}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.hero-info h1{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--accent)}
-.hero-info .sub{color:var(--muted);margin-top:6px;font-size:1rem}
-.hero-info .meta{color:var(--muted);font-size:.85rem;margin-top:8px}
-.view-sections{display:flex;flex-direction:column;gap:18px}
-.vs-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.vs-title{
-  padding:14px 22px;background:rgba(124,106,247,.12);
-  border-bottom:1px solid var(--border);font-weight:700;font-size:1rem;
-  color:var(--accent2);display:flex;align-items:center;gap:8px;
-}
-.vs-fields{padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:560px){.vs-fields{grid-template-columns:1fr}}
-.vf-label{font-size:.76rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.vf-value{font-size:.96rem;color:var(--text)}
-.empty-state{text-align:center;color:var(--muted);padding:70px 20px}
-.empty-state .ei{font-size:3rem;margin-bottom:12px}
+/* DASHBOARD SECTION */
+section{padding:4rem 1.2rem;max-width:1100px;margin:0 auto}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:var(--gold)}
+.sline{width:46px;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px;margin:.4rem 0 .65rem}
+.ssub{color:var(--mt);font-size:.87rem;margin-bottom:1.5rem}
 
-/* GALLERY */
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:20px}
-.gi{
-  border-radius:10px;overflow:hidden;aspect-ratio:1;
-  background:var(--card);border:1px solid var(--border);
-  position:relative;cursor:pointer;
-}
-.gi img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.gi:hover img{transform:scale(1.06)}
-.gi-cap{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.8));
-  color:#fff;padding:20px 10px 8px;font-size:.78rem;text-align:center;
-  transform:translateY(100%);transition:transform .3s;
-}
-.gi:hover .gi-cap{transform:translateY(0)}
+/* SEARCH */
+.sw{position:relative;max-width:460px;margin-bottom:1.3rem}
+.sw input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:12px;
+  padding:.68rem 1rem .68rem 2.7rem;color:var(--tx);font-family:'Hind Siliguri',sans-serif;
+  font-size:.87rem;outline:none;transition:.2s}
+.sw input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,192,96,.1)}
+.sw input::placeholder{color:var(--mt)}
+.si{position:absolute;left:.82rem;top:50%;transform:translateY(-50%);color:var(--mt);pointer-events:none;font-size:.92rem}
 
-/* CONTACT */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-@media(max-width:680px){.contact-grid{grid-template-columns:1fr}}
-.cfw{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
-.cfw h3{color:var(--accent);font-size:1.1rem;margin-bottom:18px}
-.drop-zone{
-  border:2px dashed var(--border);border-radius:10px;padding:18px;
-  text-align:center;color:var(--muted);font-size:.88rem;
-  cursor:pointer;transition:border-color .2s;
-}
-.drop-zone:hover,.drop-zone.drag{border-color:var(--accent2);color:var(--text)}
-.file-chip{
-  background:var(--surface);border-radius:6px;padding:5px 10px;margin-top:6px;
-  display:flex;justify-content:space-between;align-items:center;font-size:.82rem;
-}
-.send-status{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.88rem;display:none}
-.send-status.ok{background:rgba(78,203,141,.15);color:var(--success);display:block}
-.send-status.err{background:rgba(224,92,92,.15);color:var(--danger);display:block}
+/* FILTER TABS */
+.ftabs{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.ftab{padding:.3rem .88rem;border-radius:50px;font-size:.77rem;font-weight:500;cursor:pointer;
+  background:var(--s);border:1px solid var(--b);color:var(--mt);
+  font-family:'Hind Siliguri',sans-serif;transition:.2s;min-height:30px}
+.ftab.on,.ftab:hover{background:rgba(240,192,96,.14);border-color:var(--gold);color:var(--gold)}
 
-/* ADMIN BUILDER */
-.page-title{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--accent);margin-bottom:6px}
-.page-sub{color:var(--muted);margin-bottom:28px;font-size:.92rem}
-.sections-list{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.sc-header{
-  display:flex;align-items:center;gap:10px;padding:14px 18px;
-  cursor:pointer;border-bottom:1px solid var(--border);user-select:none;
-}
-.sc-header:hover{background:rgba(255,255,255,.03)}
-.sc-name{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:1rem;font-weight:600;
-}
-.sc-toggle{color:var(--muted);font-size:1rem;transition:transform .3s}
-.sc-toggle.open{transform:rotate(180deg)}
-.sc-body{padding:16px 18px;display:none}
-.sc-body.open{display:block}
-.fields-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-.field-row{
-  display:flex;align-items:flex-start;gap:8px;
-  background:var(--surface);border-radius:9px;padding:11px 12px;border:1px solid var(--border);
-}
-.field-inner{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.field-inner input{
-  background:var(--card);border:1px solid var(--border);border-radius:7px;
-  padding:8px 11px;color:var(--text);font-family:'Hind Siliguri',sans-serif;
-  font-size:.88rem;outline:none;width:100%;
-}
-.field-inner input:focus{border-color:var(--accent)}
-.field-inner input.full{grid-column:1/-1}
-.remove-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:1rem;padding:3px 6px;border-radius:5px;transition:background .2s}
-.remove-btn:hover{background:rgba(224,92,92,.15)}
-.add-field-btn{
-  background:rgba(124,106,247,.12);color:var(--accent2);
-  border:1px dashed var(--accent2);border-radius:7px;
-  padding:7px 15px;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
-  font-size:.85rem;font-weight:600;transition:all .2s;
-}
-.add-field-btn:hover{background:rgba(124,106,247,.22)}
-.add-section-bar{
-  background:var(--card);border:2px dashed var(--accent);
-  border-radius:var(--radius);padding:18px 22px;
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-}
-.add-section-bar input{
-  flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);
-  border-radius:8px;padding:10px 13px;color:var(--text);
-  font-family:'Hind Siliguri',sans-serif;font-size:.93rem;outline:none;
-}
-.add-section-bar input:focus{border-color:var(--accent)}
-.config-box{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:20px 22px;margin-bottom:24px;
-}
-.config-box h3{color:var(--accent);margin-bottom:16px;font-size:1rem}
-.config-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
-.config-row .fg{flex:1;min-width:200px;margin-bottom:0}
-.tag-badge{
-  display:inline-block;background:rgba(232,168,56,.15);color:var(--accent);
-  border-radius:5px;padding:2px 9px;font-size:.74rem;font-weight:600;margin-left:8px;
-}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+/* CARDS */
+.bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+.bdc{background:var(--s);backdrop-filter:var(--blur);border:1px solid var(--b);
+  border-radius:var(--r);padding:1.3rem 1rem;text-align:center;cursor:pointer;
+  transition:all .23s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.bdc::before{content:'';position:absolute;inset:0;border-radius:var(--r);
+  background:linear-gradient(135deg,rgba(240,192,96,.07),transparent);opacity:0;transition:.23s}
+.bdc:hover{transform:translateY(-5px);box-shadow:0 14px 38px rgba(0,0,0,.42),0 0 0 1px rgba(240,192,96,.22)}
+.bdc:hover::before{opacity:1}
+.bdc.hidden-card{opacity:.45;border-style:dashed}
+.av-ring{width:72px;height:72px;border-radius:50%;margin:0 auto .8rem;padding:2.5px;
+  background:linear-gradient(135deg,var(--gold),var(--teal));box-shadow:0 0 16px rgba(240,192,96,.18)}
+.av-in{width:100%;height:100%;border-radius:50%;background:#0b1525;
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;overflow:hidden}
+.av-in img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cn{font-weight:700;font-size:.9rem;margin-bottom:.13rem}
+.cj{font-size:.73rem;color:var(--teal);margin-bottom:.28rem;font-weight:500}
+.cl{font-size:.7rem;color:var(--mt);margin-bottom:.75rem}
+.cb2{display:flex;flex-wrap:wrap;gap:.26rem;justify-content:center;margin-bottom:.75rem}
+.cb2 span{font-size:.6rem;padding:.11rem .4rem;background:rgba(255,255,255,.06);border:1px solid var(--b);border-radius:50px;color:var(--mt)}
+.cvb{width:100%;padding:.44rem;border-radius:9px;border:1px solid rgba(240,192,96,.22);
+  background:rgba(240,192,96,.07);color:var(--gold);font-size:.76rem;font-weight:600;
+  font-family:'Hind Siliguri',sans-serif;cursor:pointer;transition:.2s}
+.bdc:hover .cvb{background:rgba(240,192,96,.16)}
+.bd-empty{grid-column:1/-1;text-align:center;padding:3.5rem 1rem;
+  color:var(--mt);border:2px dashed var(--b);border-radius:var(--r);font-size:.87rem}
+.bd-loading{grid-column:1/-1;text-align:center;padding:3rem;color:var(--mt)}
+.spin{display:inline-block;width:20px;height:20px;border:2.5px solid rgba(255,255,255,.1);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{
-  position:fixed;bottom:26px;right:26px;z-index:9999;
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:13px 18px;max-width:320px;box-shadow:var(--shadow);font-size:.88rem;
-  transform:translateY(100px);opacity:0;transition:all .3s;
+
+/* HOW */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1rem}
+.hc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:1.4rem;transition:.2s}
+.hc:hover{background:var(--s2);transform:translateY(-3px)}
+.hn{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:rgba(240,192,96,.18);line-height:1;margin-bottom:.45rem}
+.hc h3{font-size:.9rem;font-weight:600;color:var(--gold);margin-bottom:.3rem}
+.hc p{font-size:.81rem;color:var(--mt);line-height:1.65}
+
+/* ADMIN PANEL */
+#adm-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.88);
+  backdrop-filter:blur(7px);overflow-y:auto}
+#adm-overlay.open{display:block}
+.adm-panel{background:#060d1a;border-right:1px solid var(--b);min-height:100vh;
+  max-width:1000px;margin:0 auto;padding:1.5rem}
+.adm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem}
+.adm-head h2{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold)}
+.atabs{display:flex;gap:.35rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.atab{padding:.35rem .9rem;border-radius:9px;font-size:.8rem;font-weight:600;cursor:pointer;
+  background:var(--s);border:1px solid var(--b);color:var(--mt);
+  font-family:'Hind Siliguri',sans-serif;transition:.2s;min-height:32px}
+.atab.on{background:rgba(240,192,96,.18);border-color:var(--gold);color:var(--gold)}
+.atab-body{display:none}
+.atab-body.on{display:block}
+.adm-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.adm-table th{color:var(--gold);font-size:.7rem;font-weight:600;text-align:left;
+  padding:.42rem .65rem;border-bottom:1px solid rgba(255,255,255,.09);text-transform:uppercase;letter-spacing:.3px}
+.adm-table td{padding:.52rem .65rem;border-bottom:1px solid rgba(255,255,255,.045);vertical-align:middle}
+.adm-table tr:hover td{background:rgba(255,255,255,.03)}
+.adm-av{width:32px;height:32px;border-radius:50%;border:1px solid var(--b);object-fit:cover;background:#0b1525;display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;flex-shrink:0}
+.adm-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.status-badge{font-size:.65rem;padding:.1rem .4rem;border-radius:50px;font-weight:600}
+.sb-active{background:rgba(94,231,208,.12);color:var(--teal);border:1px solid rgba(94,231,208,.25)}
+.sb-hidden{background:rgba(255,193,7,.12);color:#ffc107;border:1px solid rgba(255,193,7,.25)}
+.sb-deleted{background:rgba(255,107,107,.12);color:var(--red);border:1px solid rgba(255,107,107,.25)}
+.adm-acts{display:flex;gap:.28rem;flex-wrap:wrap}
+.abtn{padding:.26rem .6rem;border-radius:7px;font-size:.72rem;font-weight:600;cursor:pointer;
+  font-family:'Hind Siliguri',sans-serif;border:none;transition:.2s;min-height:28px}
+.abtn-view{background:rgba(94,231,208,.12);color:var(--teal);border:1px solid rgba(94,231,208,.2)}
+.abtn-hide{background:rgba(255,193,7,.12);color:#ffc107;border:1px solid rgba(255,193,7,.2)}
+.abtn-del{background:rgba(255,107,107,.12);color:var(--red);border:1px solid rgba(255,107,107,.2)}
+.abtn:hover{opacity:.8;transform:scale(1.04)}
+.adm-msg-card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:.7rem}
+.adm-msg-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem}
+.adm-msg-head strong{font-size:.87rem;color:var(--gold)}
+.adm-msg-head span{font-size:.72rem;color:var(--mt)}
+.adm-msg-card p{font-size:.83rem;color:var(--mt);line-height:1.65}
+.adm-st{padding:.55rem .8rem;border-radius:9px;font-size:.81rem;margin-top:.5rem;line-height:1.5;display:none}
+.adm-st.ok{display:block;background:rgba(94,231,208,.08);border:1px solid rgba(94,231,208,.26);color:var(--teal)}
+.adm-st.err{display:block;background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.26);color:#ff8080}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.83);
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
+.modal.open{display:flex;animation:mIn .2s ease}
+@keyframes mIn{from{opacity:0}to{opacity:1}}
+.mbox{background:#080f1e;border:1px solid var(--b);border-radius:var(--r);
+  width:min(95vw,420px);padding:clamp(1.3rem,4vw,2rem);position:relative;
+  max-height:92vh;overflow-y:auto;margin:auto}
+.mbox::-webkit-scrollbar{width:4px}
+.mbox::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.mclose{position:absolute;top:.75rem;right:.75rem;background:var(--s2);border:1px solid var(--b);
+  color:var(--mt);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:.9rem;transition:.2s}
+.mclose:hover{background:rgba(255,80,80,.2);color:var(--tx)}
+.mtitle{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:1.1rem}
+.mtabs{display:flex;gap:.32rem;margin-bottom:1.1rem;background:rgba(255,255,255,.05);border-radius:10px;padding:.26rem}
+.mtab{flex:1;padding:.44rem;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600;
+  cursor:pointer;font-family:'Hind Siliguri',sans-serif;border:none;background:transparent;color:var(--mt);transition:.2s}
+.mtab.on{background:rgba(240,192,96,.18);color:var(--gold)}
+.mf{display:flex;flex-direction:column;gap:.26rem;margin-bottom:.72rem}
+.mf label{font-size:.75rem;color:var(--gold);font-weight:600}
+.mf input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:10px;
+  padding:.6rem .88rem;color:var(--tx);font-family:'Hind Siliguri',sans-serif;
+  font-size:.85rem;outline:none;width:100%;min-height:44px;transition:.2s}
+.mf input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,192,96,.1)}
+.mf input::placeholder{color:var(--mt)}
+.gdiv{text-align:center;color:var(--mt);font-size:.77rem;margin:.45rem 0;position:relative}
+.gdiv::before,.gdiv::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--b)}
+.gdiv::before{left:0}.gdiv::after{right:0}
+.gbtn{width:100%;padding:.6rem;border-radius:10px;background:rgba(255,255,255,.06);
+  border:1px solid var(--b);color:var(--tx);font-family:'Hind Siliguri',sans-serif;
+  font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:.45rem;transition:.2s;min-height:44px}
+.gbtn:hover{background:rgba(255,255,255,.12);border-color:var(--teal)}
+/* stored email chips */
+.email-chips{display:flex;flex-direction:column;gap:.32rem;margin-bottom:.7rem}
+.ec{display:flex;align-items:center;gap:.5rem;background:rgba(94,231,208,.07);
+  border:1px solid rgba(94,231,208,.18);border-radius:10px;padding:.45rem .75rem;
+  cursor:pointer;transition:.2s;font-size:.84rem}
+.ec:hover{background:rgba(94,231,208,.15);border-color:var(--teal)}
+.ec-av{width:28px;height:28px;border-radius:50%;background:rgba(240,192,96,.2);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.ec-info{display:flex;flex-direction:column}
+.ec-name{font-size:.82rem;font-weight:600;color:var(--tx)}
+.ec-email{font-size:.7rem;color:var(--mt)}
+.msbtn{width:100%;padding:.75rem;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#f7d060,var(--gold),var(--g3));color:#1a0800;
+  font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);margin-top:.32rem;min-height:46px;
+  box-shadow:0 4px 16px var(--glow)}
+.msbtn:hover:not(:disabled){transform:translateY(-2px) scale(1.02);box-shadow:0 8px 26px var(--glow)}
+.msbtn:disabled{opacity:.5;cursor:not-allowed}
+.mst{padding:.55rem .82rem;border-radius:9px;font-size:.8rem;margin-top:.5rem;line-height:1.5;display:none}
+.mst.ok{display:block;background:rgba(94,231,208,.08);border:1px solid rgba(94,231,208,.26);color:var(--teal)}
+.mst.err{display:block;background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.26);color:#ff8080}
+.mst.info{display:block;background:rgba(129,152,255,.08);border:1px solid rgba(129,152,255,.26);color:#8198ff}
+.mlink{text-align:center;font-size:.79rem;color:var(--mt);margin-top:.82rem}
+.mlink a{color:var(--gold);cursor:pointer}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .55s,transform .55s}
+.rv.in{opacity:1;transform:none}
+
+footer{text-align:center;padding:1.8rem;color:var(--mt);font-size:.77rem;
+  border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:1}
+footer b{color:var(--gold)}
+
+@media(max-width:600px){
+  .hbtns{flex-direction:column;align-items:center}
+  .hbtns .btn{width:100%;max-width:260px;justify-content:center}
+  .stats{gap:1.1rem}
+  .bd-grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.75rem}
+  .ftabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:.3rem}
+  .ftabs::-webkit-scrollbar{display:none}
+  .ftab{flex-shrink:0}
+  .adm-table{font-size:.76rem}
+  .adm-table th,.adm-table td{padding:.38rem .45rem}
 }
-.toast.show{transform:translateY(0);opacity:1}
-.toast.ok{border-left:3px solid var(--success)}
-.toast.err{border-left:3px solid var(--danger)}
-.note{color:var(--muted);font-size:.82rem;margin-top:5px}
-pre{background:var(--bg);border-radius:7px;padding:10px;overflow-x:auto;color:var(--accent);font-size:.78rem;white-space:pre-wrap;word-break:break-all}
-.guide-box{background:var(--surface);border-radius:10px;padding:16px;font-size:.83rem;color:var(--muted);line-height:1.8;margin-top:14px;display:none}
 </style>
 </head>
 <body>
+<div id="bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="wrap">
 
 <!-- NAV -->
 <nav>
-  <div class="nav-brand" onclick="goHome()">✦ বায়োডাটা</div>
-  <div class="nav-tabs" id="publicTabs">
-    <button class="nav-tab active" onclick="showPage('viewPage',this)">👁 প্রোফাইল</button>
-    <button class="nav-tab" onclick="showPage('galleryPage',this)">🖼 গ্যালারি</button>
-    <button class="nav-tab" onclick="showPage('contactPage',this)">✉️ যোগাযোগ</button>
-  </div>
-  <div class="nav-tabs" id="adminTabs" style="display:none">
-    <button class="nav-tab" onclick="showAdminPage('builderPage',this)">✏️ সম্পাদনা</button>
-    <button class="nav-tab" onclick="showAdminPage('adminGalleryPage',this)">🖼 গ্যালারি সেটিং</button>
-    <button class="nav-tab" onclick="showAdminPage('adminContactPage',this)">✉️ ফর্ম সেটিং</button>
-    <button class="nav-tab" onclick="showAdminPage('settingsPage',this)">⚙️ সেটিংস</button>
-  </div>
-  <div class="nav-actions">
-    <span id="adminBadge" style="display:none;color:var(--accent);font-size:.82rem;font-weight:600">🔑 অ্যাডমিন</span>
-    <button class="btn btn-ghost btn-sm" id="adminToggleBtn" onclick="openLoginModal()">🔐 অ্যাডমিন</button>
-    <button class="btn btn-ghost btn-sm" id="logoutBtn" style="display:none" onclick="logout()">লগআউট</button>
+  <a class="logo" href="index.html">বায়োডাটা</a>
+  <div class="nav-r">
+    <div id="ng">
+      <button class="btn btn-o btn-sm" onclick="openAuth('login')">লগইন</button>
+      <button class="btn btn-g btn-sm" onclick="openAuth('signup')">✨ সাইন আপ</button>
+      <button class="btn btn-o btn-sm" onclick="openAdminLogin()">🛡️ অ্যাডমিন</button>
+    </div>
+    <div id="nu">
+      <span id="nu-name"></span>
+      <a class="btn btn-g btn-sm" id="mybio" href="#">📝 আমার বায়োডাটা</a>
+      <button class="btn btn-o btn-sm" onclick="logout()">বের হন</button>
+    </div>
   </div>
 </nav>
 
-<!-- PUBLIC: PROFILE VIEW -->
-<div id="viewPage" class="page active">
-  <div class="hero">
-    <div class="avatar" id="heroAvatar">😊</div>
-    <div class="hero-info">
-      <h1 id="heroName">লোড হচ্ছে...</h1>
-      <p class="sub" id="heroSub"></p>
-      <p class="meta" id="heroMeta"></p>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-in rv">
+    <div class="htag">✦ ডিজিটাল বায়োডাটা প্ল্যাটফর্ম</div>
+    <h1>আপনার পরিচয়<br><span class="grad">সবার কাছে পৌঁছে দিন</span></h1>
+    <p class="hsub">সাইন আপ করুন, নিজের বায়োডাটা তৈরি করুন। শিক্ষা, পেশা ও পারিবারিক তথ্য সুন্দরভাবে সাজান — সবাই দেখতে পাবে, শুধু আপনি আপডেট করতে পারবেন।</p>
+    <div class="hbtns">
+      <button class="btn btn-g" onclick="openAuth('signup')">✨ বিনামূল্যে শুরু করুন</button>
+      <a class="btn btn-o" href="#dash">🔍 সব বায়োডাটা দেখুন</a>
+    </div>
+    <div class="stats">
+      <div><div class="stn" id="s-u">—</div><div class="stl">নিবন্ধিত ব্যবহারকারী</div></div>
+      <div><div class="stn" id="s-b">—</div><div class="stl">প্রকাশিত বায়োডাটা</div></div>
+      <div><div class="stn">১০০%</div><div class="stl">বিনামূল্যে</div></div>
     </div>
   </div>
-  <div class="view-sections" id="viewSections">
-    <div class="empty-state"><div class="ei">📝</div><p>বায়োডাটা তৈরি করা হয়নি।</p></div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dash">
+  <div class="rv">
+    <p class="stitle">সব বায়োডাটা</p>
+    <div class="sline"></div>
+    <p class="ssub">সবার ডিজিটাল পরিচয় এক জায়গায়</p>
+    <div class="sw"><span class="si">🔍</span><input id="q" placeholder="নাম, পেশা বা এলাকা..." oninput="render()"></div>
+    <div class="ftabs" id="ftabs">
+      <button class="ftab on" data-f="all">সবাই</button>
+      <button class="ftab" data-f="student">শিক্ষার্থী</button>
+      <button class="ftab" data-f="job">চাকরিজীবী</button>
+      <button class="ftab" data-f="business">ব্যবসায়ী</button>
+      <button class="ftab" data-f="other">অন্যান্য</button>
+    </div>
+    <div class="bd-grid" id="grid">
+      <div class="bd-loading"><div class="spin"></div><p style="margin-top:.7rem;font-size:.83rem">লোড হচ্ছে...</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section>
+  <div class="rv"><p class="stitle">কীভাবে কাজ করে?</p><div class="sline"></div></div>
+  <div class="how-grid">
+    <div class="hc rv"><div class="hn">০১</div><h3>সাইন আপ করুন</h3><p>ইমেইল/পাসওয়ার্ড বা Google দিয়ে মাত্র কয়েক সেকেন্ডে।</p></div>
+    <div class="hc rv"><div class="hn">০২</div><h3>তথ্য পূরণ করুন</h3><p>ব্যক্তিগত, শিক্ষা, পেশা ও পারিবারিক তথ্য যোগ করুন।</p></div>
+    <div class="hc rv"><div class="hn">০৩</div><h3>প্রকাশ করুন</h3><p>আপনার বায়োডাটা পাবলিক ড্যাশবোর্ডে দেখাবে।</p></div>
+    <div class="hc rv"><div class="hn">০৪</div><h3>যোগাযোগ করুন</h3><p>লগইন করে যেকোনো ব্যক্তির সাথে সরাসরি বার্তা পাঠান।</p></div>
+  </div>
+</section>
+
+<footer><p>তৈরি করেছে <b>বায়োডাটা প্ল্যাটফর্ম</b> ❤️ | সবার জন্য বিনামূল্যে</p></footer>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="auth-modal">
+  <div class="mbox">
+    <button class="mclose" onclick="closeM('auth-modal')">✕</button>
+    <p class="mtitle" id="auth-title">স্বাগতম</p>
+    <div class="mtabs">
+      <button class="mtab on" id="tl" onclick="switchTab('login')">লগইন</button>
+      <button class="mtab" id="ts" onclick="switchTab('signup')">সাইন আপ</button>
+    </div>
+
+    <!-- Stored email chips -->
+    <div id="email-chips" class="email-chips" style="display:none"></div>
+    <div id="new-acc-link" style="display:none;text-align:center;margin-bottom:.5rem">
+      <a style="font-size:.79rem;color:var(--gold);cursor:pointer" onclick="showEmailForm()">+ অন্য ইমেইল দিয়ে</a>
+    </div>
+
+    <!-- Manual form -->
+    <div id="email-form">
+      <button class="gbtn" onclick="googleQuickAuth()">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Google দিয়ে অ্যাকাউন্ট
+      </button>
+      <div class="gdiv">অথবা ইমেইল দিয়ে</div>
+      <div id="fn-wrap" style="display:none"><div class="mf"><label>পূর্ণ নাম *</label><input id="fn" type="text" placeholder="আপনার পুরো নাম" autocomplete="name"></div></div>
+      <div class="mf"><label>ইমেইল *</label><input id="fe" type="email" placeholder="email@example.com" autocomplete="email"></div>
+      <div class="mf"><label>পাসওয়ার্ড *</label><input id="fp" type="password" placeholder="পাসওয়ার্ড দিন"></div>
+      <div id="fp2-wrap" style="display:none"><div class="mf"><label>পাসওয়ার্ড নিশ্চিত করুন *</label><input id="fp2" type="password" placeholder="আবার পাসওয়ার্ড দিন"></div></div>
+      <button class="msbtn" id="auth-btn" onclick="submitAuth()">লগইন করুন</button>
+    </div>
+
+    <div class="mst" id="auth-st"></div>
+    <div class="mlink" id="auth-lnk">অ্যাকাউন্ট নেই? <a onclick="switchTab('signup')">সাইন আপ করুন</a></div>
   </div>
 </div>
 
-<!-- PUBLIC: GALLERY -->
-<div id="galleryPage" class="page">
-  <h1 class="page-title">ফটো গ্যালারি</h1>
-  <div id="galleryGrid" class="gallery-grid"></div>
-  <div id="galleryEmpty" class="empty-state"><div class="ei">🖼️</div><p>এখনো কোনো ছবি নেই।</p></div>
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal" id="adm-login-modal">
+  <div class="mbox">
+    <button class="mclose" onclick="closeM('adm-login-modal')">✕</button>
+    <p class="mtitle">🛡️ অ্যাডমিন লগইন</p>
+    <div class="mf"><label>অ্যাডমিন পাসওয়ার্ড</label><input id="adm-pw" type="password" placeholder="পাসওয়ার্ড দিন"></div>
+    <button class="msbtn" onclick="submitAdminLogin()">প্রবেশ করুন</button>
+    <div class="mst" id="adm-login-st"></div>
+  </div>
 </div>
 
-<!-- PUBLIC: CONTACT -->
-<div id="contactPage" class="page">
-  <h1 class="page-title">যোগাযোগ করুন</h1>
-  <p class="page-sub">বার্তা পাঠান — সরাসরি জমা হয়ে যাবে।</p>
-  <div class="contact-grid">
-    <div class="cfw">
-      <h3>✉️ বার্তা লিখুন</h3>
-      <div class="fg"><label>আপনার নাম *</label><input type="text" id="cf_name" placeholder="পূর্ণ নাম"></div>
-      <div class="fg"><label>ইমেইল *</label><input type="email" id="cf_email" placeholder="email@example.com"></div>
-      <div class="fg"><label>বার্তা *</label><textarea id="cf_message" rows="5" placeholder="আপনার বার্তা..."></textarea></div>
-      <div class="fg">
-        <label>ফাইল / ছবি (ঐচ্ছিক)</label>
-        <div class="drop-zone" id="dropZone"
-          onclick="document.getElementById('fileInput').click()"
-          ondragover="event.preventDefault();this.classList.add('drag')"
-          ondragleave="this.classList.remove('drag')"
-          ondrop="handleDrop(event)">
-          📎 ক্লিক করুন বা ফাইল টেনে আনুন
-        </div>
-        <input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)">
-        <div id="fileList"></div>
+<!-- ADMIN PANEL -->
+<div id="adm-overlay">
+  <div class="adm-panel">
+    <div class="adm-head">
+      <h2>🛡️ অ্যাডমিন ড্যাশবোর্ড</h2>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn btn-o btn-sm" onclick="loadAdminData()">🔄 রিফ্রেশ</button>
+        <button class="btn btn-r btn-sm" onclick="closeAdmin()">✕ বন্ধ করুন</button>
       </div>
-      <button class="btn btn-primary" onclick="submitContact()" style="width:100%;padding:12px;font-size:1rem">📨 পাঠান</button>
-      <div class="send-status" id="sendStatus"></div>
     </div>
-    <div style="color:var(--muted);padding:20px 0">
-      <div style="font-size:2rem;margin-bottom:12px">💬</div>
-      <p style="line-height:1.8;font-size:.93rem">আপনার বার্তা, মতামত বা যোগাযোগের প্রস্তাব পাঠাতে ফর্মটি পূরণ করুন।</p>
-      <div id="contactOwnerInfo" style="margin-top:20px;font-size:.9rem"></div>
+    <div class="atabs" id="adm-tabs">
+      <button class="atab on" data-t="users">👥 ব্যবহারকারী</button>
+      <button class="atab" data-t="messages">📩 বার্তাসমূহ</button>
     </div>
-  </div>
-</div>
+    <div class="adm-st" id="adm-act-st"></div>
 
-<!-- LOGIN MODAL -->
-<div id="loginModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center">
-  <div class="login-box" style="position:relative">
-    <button onclick="closeLoginModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;line-height:1">✕</button>
-    <div class="login-logo">🔐</div>
-    <div class="login-sub">অ্যাডমিন প্যানেল</div>
-    <div class="fg"><label>ইউজারনেম</label><input type="text" id="lu" placeholder="ইউজারনেম"></div>
-    <div class="fg"><label>পাসওয়ার্ড</label><input type="password" id="lp" placeholder="পাসওয়ার্ড" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <button class="btn btn-primary" onclick="doLogin()" style="width:100%;padding:12px;font-size:1rem;margin-top:6px">লগইন</button>
-    <div class="login-err" id="loginErr">❌ ভুল তথ্য</div>
-    <p style="color:var(--muted);font-size:.78rem;text-align:center;margin-top:16px">ডিফল্ট: <b>admin</b> / <b>admin123</b></p>
-  </div>
-</div>
-
-<!-- ADMIN: BUILDER -->
-<div id="builderPage" class="page">
-  <h1 class="page-title">বায়োডাটা সম্পাদনা</h1>
-  <p class="page-sub">সেকশন যোগ করুন, ক্লিক করে খুলুন, ফিল্ড লিখুন।</p>
-  <div class="sections-list" id="sectionsList"></div>
-  <div class="add-section-bar">
-    <span style="font-size:1.1rem">➕</span>
-    <input type="text" id="newSectionName" placeholder="নতুন সেকশনের নাম (যেমন: কর্মক্ষেত্র)" onkeydown="if(event.key==='Enter')addSection()">
-    <button class="btn btn-primary" onclick="addSection()">সেকশন যোগ করুন</button>
-  </div>
-  <div style="margin-top:24px;text-align:right">
-    <button class="btn btn-success" onclick="saveData()">💾 সংরক্ষণ ও প্রকাশ করুন</button>
-  </div>
-</div>
-
-<!-- ADMIN: GALLERY SETTINGS -->
-<div id="adminGalleryPage" class="page">
-  <h1 class="page-title">গ্যালারি সেটিংস</h1>
-  <div class="config-box">
-    <h3>🖼 Google Drive ফোল্ডার</h3>
-    <div class="config-row">
-      <div class="fg">
-        <label>Folder ID</label>
-        <input type="text" id="driveFolderId" placeholder="ফোল্ডারের ID">
-        <p class="note">URL: drive.google.com/drive/folders/<b>এটুকু_কপি_করুন</b></p>
-      </div>
-      <div class="fg">
-        <label>Google API Key</label>
-        <input type="text" id="driveApiKey" placeholder="AIza...">
+    <!-- Users tab -->
+    <div class="atab-body on" id="abt-users">
+      <div style="overflow-x:auto">
+        <table class="adm-table" id="adm-users-tbl">
+          <thead><tr><th>ছবি</th><th>নাম</th><th>ইমেইল</th><th>পেশা</th><th>যোগদান</th><th>স্ট্যাটাস</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="adm-users-body"><tr><td colspan="7" style="text-align:center;padding:2rem"><div class="spin"></div></td></tr></tbody>
+        </table>
       </div>
     </div>
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="saveGalleryConfig()">💾 সংরক্ষণ করুন</button>
-      <button class="btn btn-ghost btn-sm" onclick="testGallery()">🔍 পরীক্ষা করুন</button>
-    </div>
-    <div style="margin-top:14px;color:var(--muted);font-size:.83rem">
-      ℹ️ ফোল্ডার → Share → <b>Anyone with the link → Viewer</b> করুন।<br>
-      API Key: <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--accent2)">Google Cloud Console</a> → Drive API সক্রিয় করুন।
-    </div>
-  </div>
-  <div id="galleryTestResult"></div>
-</div>
 
-<!-- ADMIN: CONTACT SETTINGS -->
-<div id="adminContactPage" class="page">
-  <h1 class="page-title">যোগাযোগ ফর্ম সেটিংস</h1>
-  <div class="config-box">
-    <h3>📋 Google Sheet সংযোগ</h3>
-    <div class="fg"><label>Google Apps Script Web App URL</label><input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/AKfycbzODi72xr6wriZrwNG9QytwsyMt5EUC9PDLU_IXghvRXf6RC61RVefSXgH4bJ7O3lbTzw/exec"></div>
-    <div class="fg"><label>আপনার পরিচয় তথ্য (ঐচ্ছিক — Contact পাতায় দেখাবে)</label><input type="text" id="ownerInfo" placeholder="যেমন: 📍 ঢাকা | 📞 +880..."></div>
-    <button class="btn btn-primary btn-sm" onclick="saveContactConfig()">💾 সংরক্ষণ</button>
-    <button class="btn btn-ghost btn-sm" onclick="toggleGuide('gsGuide')" style="margin-left:8px">📖 Apps Script গাইড</button>
-    <div class="guide-box" id="gsGuide">
-      <b style="color:var(--text)">Apps Script সেটআপ (৫ মিনিট):</b><br>
-      ১. আপনার Google Sheet খুলুন<br>
-      ২. <b>Extensions → Apps Script</b> ক্লিক করুন<br>
-      ৩. <b>code.gs</b> ফাইলে এই রেপোর <code>code.gs</code> কোড পেস্ট করুন<br>
-      ৪. উপরে <b>SHEET_ID</b> আপনার Sheet এর ID দিন<br>
-      ৫. <b>Deploy → New Deployment → Web App</b><br>
-      &nbsp;&nbsp;&nbsp;• Execute as: <b>Me</b><br>
-      &nbsp;&nbsp;&nbsp;• Who has access: <b>Anyone</b><br>
-      ৬. URL কপি করে উপরে পেস্ট করুন<br><br>
-      <b style="color:var(--text)">Sheet ID কোথায়?</b><br>
-      <code>docs.google.com/spreadsheets/d/<b>এটাই_ID</b>/edit</code>
+    <!-- Messages tab -->
+    <div class="atab-body" id="abt-messages">
+      <div id="adm-msgs-list"><div style="text-align:center;padding:2rem"><div class="spin"></div></div></div>
     </div>
   </div>
 </div>
-
-<!-- ADMIN: SETTINGS -->
-<div id="settingsPage" class="page">
-  <h1 class="page-title">সেটিংস</h1>
-  <div class="config-box" style="margin-bottom:18px">
-    <h3>👤 প্রোফাইল তথ্য</h3>
-    <div class="fg"><label>পূর্ণ নাম</label><input type="text" id="s_name" placeholder="আপনার নাম"></div>
-    <div class="fg"><label>পেশা / পরিচয়</label><input type="text" id="s_sub" placeholder="শিক্ষার্থী, ঢাকা বিশ্ববিদ্যালয়"></div>
-    <div class="fg"><label>ঠিকানা / ফোন / অতিরিক্ত</label><input type="text" id="s_meta" placeholder="ঢাকা | +880..."></div>
-    <div class="fg"><label>প্রোফাইল ছবি URL</label><input type="text" id="s_photo" placeholder="https://...jpg"></div>
-  </div>
-  <div class="config-box" style="margin-bottom:18px">
-    <h3>🔐 লগইন পরিবর্তন</h3>
-    <div class="fg"><label>নতুন ইউজারনেম</label><input type="text" id="s_user"></div>
-    <div class="fg"><label>নতুন পাসওয়ার্ড</label><input type="password" id="s_pass" placeholder="খালি রাখলে পরিবর্তন হবে না"></div>
-  </div>
-  <button class="btn btn-success" onclick="saveSettings()">💾 সংরক্ষণ করুন</button>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-const DEFAULT = {
-  auth:    { user:'admin', pass:'admin123' },
-  profile: { name:'', sub:'', meta:'', photo:'' },
-  sections:[],
-  gallery: { folderId:'18FzPNHHfNmgFrw1ApRoHMzFnVnKMbCLm', apiKey:'' },
-  contact: { scriptUrl:'', ownerInfo:'' }
-};
-let S = JSON.parse(JSON.stringify(DEFAULT));
-let isAdmin = false;
-let selectedFiles = [];
+var API = 'https://script.google.com/macros/s/AKfycbyt9E2qm9bR7Oz0m3HPwhjRdDOnTqebNriaI_5zPDpdgpww3etmEIlscdrF34KZDv-Jdg/exec';
 
-function loadState(){
-  try{const d=localStorage.getItem('bd2');if(d)S={...S,...JSON.parse(d)};}catch(e){}
-}
-function saveState(){
-  try{localStorage.setItem('bd2',JSON.stringify(S));}catch(e){}
-}
-loadState();
+var bios=[], filter='all', user=null, adminToken=null;
 
-// ══════════════════════════════════════════════
-//  AUTH & MODAL
-// ══════════════════════════════════════════════
-function openLoginModal(){
-  const m=document.getElementById('loginModal');
-  m.style.display='flex';
-  document.getElementById('loginErr').style.display='none';
-  document.getElementById('lu').value='';
-  document.getElementById('lp').value='';
-  setTimeout(()=>document.getElementById('lu').focus(),50);
+// API Test on startup
+async function testAPI(){
+  try {
+    console.log('🧪 Testing API connection...');
+    var r=await fetch(API+'?action=getAllBios',{method:'GET'});
+    console.log('API Response Status:',r.status);
+    if(r.ok){
+      console.log('✅ API Connected!');
+      return true;
+    } else {
+      console.error('❌ API returned',r.status);
+      alert('⚠️ API সমস্যা!\n\nStatus: '+r.status+'\n\n১. Google Apps Script Deploy করেছেন?\n২. "Anyone" access দিয়েছেন?\n৩. নতুন deployment URL দিয়েছেন?');
+      return false;
+    }
+  } catch(e) {
+    console.error('❌ API Connection Failed:',e);
+    alert('❌ API এ যোগাযোগ হচ্ছে না!\n\n'+e.message+'\n\nAPI URL ঠিক আছে কিনা চেক করুন।');
+    return false;
+  }
 }
-function closeLoginModal(){
-  document.getElementById('loginModal').style.display='none';
+
+// ── Session ──
+function getS(){ try{return JSON.parse(localStorage.getItem('_bsess')||'null');}catch(e){return null;} }
+function setS(u){ localStorage.setItem('_bsess',JSON.stringify(u)); user=u; }
+function clrS(){ localStorage.removeItem('_bsess'); user=null; }
+
+// Stored emails (for quick login chips)
+function getSaved(){ try{return JSON.parse(localStorage.getItem('_saved_emails')||'[]');}catch(e){return[];} }
+function saveEmail(u){
+  var arr=getSaved().filter(function(x){return x.email!==u.email;});
+  arr.unshift({name:u.name,email:u.email,photo:u.photo||''});
+  if(arr.length>5) arr=arr.slice(0,5);
+  localStorage.setItem('_saved_emails',JSON.stringify(arr));
 }
-// ESC key closes modal
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLoginModal(); });
-// click outside modal box closes it
-document.getElementById('loginModal').addEventListener('click',function(e){
-  if(e.target===this) closeLoginModal();
+
+// ── API ──
+async function GET(p){ 
+  try {
+    var r=await fetch(API+'?'+new URLSearchParams(p)); 
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  } catch(e) {
+    console.error('GET Error:',e);
+    alert('API Error: '+e.message+'\n\nAPI URL চেক করুন। Deploy করেছেন কিনা দেখুন।');
+    return {success:false, error:e.message};
+  }
+}
+
+async function POST(b){ 
+  try {
+    console.log('POST Request:',b);
+    var r=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(b)
+    });
+    console.log('Response status:',r.status);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var data=await r.json();
+    console.log('Response data:',data);
+    return data;
+  } catch(e) {
+    console.error('POST Error:',e);
+    alert('❌ API সমস্যা:\n'+e.message+'\n\n১. API URL ঠিক আছে?\n২. Deploy করে Anyone access দিয়েছেন?\n৩. Console দেখুন (F12)');
+    return {success:false, error:e.message};
+  }
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Nav ──
+function updateNav(){
+  user=getS();
+  var ng=document.getElementById('ng'), nu=document.getElementById('nu');
+  if(user){
+    ng.style.display='none'; nu.style.display='flex';
+    document.getElementById('nu-name').textContent=user.name||user.email;
+    document.getElementById('mybio').href='biodata.html?uid='+user.uid;
+  } else { ng.style.display='flex'; nu.style.display='none'; }
+}
+function logout(){ if(!confirm('লগআউট করবেন?'))return; clrS(); updateNav(); }
+
+// ── Modal ──
+var curTab='login';
+function openM(id){ document.getElementById(id).classList.add('open'); }
+function closeM(id){ document.getElementById(id).classList.remove('open'); }
+
+function openAuth(tab){
+  curTab=tab||'login';
+  openM('auth-modal');
+  switchTab(curTab);
+  renderChips();
+}
+
+function renderChips(){
+  var saved=getSaved(), wrap=document.getElementById('email-chips'), lnk=document.getElementById('new-acc-link');
+  if(!saved.length){ wrap.style.display='none'; lnk.style.display='none'; document.getElementById('email-form').style.display='block'; return; }
+  wrap.style.display='flex'; lnk.style.display='block';
+  wrap.innerHTML=saved.map(function(u){
+    var av=u.photo?'<img src="'+esc(u.photo)+'" onerror="this.style.display=\'none\'">':'<span>'+(u.name||u.email)[0]+'</span>';
+    return '<div class="ec" onclick="quickLogin(\''+esc(u.email)+'\')">'
+      +'<div class="ec-av">'+av+'</div>'
+      +'<div class="ec-info"><span class="ec-name">'+esc(u.name||u.email)+'</span><span class="ec-email">'+esc(u.email)+'</span></div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('email-form').style.display='none';
+}
+
+function showEmailForm(){
+  document.getElementById('email-chips').style.display='none';
+  document.getElementById('new-acc-link').style.display='none';
+  document.getElementById('email-form').style.display='block';
+}
+
+async function quickLogin(email){
+  // Ask password for security
+  var pass=prompt('পাসওয়ার্ড দিন ('+email+'):');
+  if(!pass) return;
+  setSt('auth-st','','');
+  var r=await POST({action:'login',email:email,password:pass});
+  if(r.success){
+    setS(r.user); saveEmail(r.user);
+    setSt('auth-st','ok','✅ লগইন সফল!');
+    setTimeout(function(){ closeM('auth-modal'); updateNav(); loadBios(); },700);
+  } else { alert('❌ '+r.error); }
+}
+
+function switchTab(tab){
+  curTab=tab;
+  var isL=tab==='login';
+  document.getElementById('tl').classList.toggle('on',isL);
+  document.getElementById('ts').classList.toggle('on',!isL);
+  document.getElementById('fn-wrap').style.display=isL?'none':'block';
+  document.getElementById('fp2-wrap').style.display=isL?'none':'block';
+  document.getElementById('auth-btn').textContent=isL?'লগইন করুন':'অ্যাকাউন্ট তৈরি করুন';
+  document.getElementById('auth-title').textContent=isL?'👋 আবার স্বাগতম':'✨ নতুন অ্যাকাউন্ট';
+  document.getElementById('auth-lnk').innerHTML=isL
+    ?'অ্যাকাউন্ট নেই? <a onclick="switchTab(\'signup\')">সাইন আপ করুন</a>'
+    :'অ্যাকাউন্ট আছে? <a onclick="switchTab(\'login\')">লগইন করুন</a>';
+  setSt('auth-st','','');
+}
+
+async function submitAuth(){
+  var email=v('fe'), pass=v('fp'), btn=document.getElementById('auth-btn');
+  
+  console.log('submitAuth called - tab:', curTab);
+  console.log('Email:', email, 'Pass:', pass);
+  
+  if(!email){ setSt('auth-st','err','ইমেইল দিন'); return; }
+  if(!pass)  { setSt('auth-st','err','পাসওয়ার্ড দিন'); return; }
+  
+  btn.disabled=true;
+  
+  if(curTab==='signup'){
+    var name=v('fn'), pass2=v('fp2');
+    console.log('Signup - Name:', name);
+    
+    if(!name)       { setSt('auth-st','err','নাম দিন'); btn.disabled=false; return; }
+    if(pass!==pass2){ setSt('auth-st','err','পাসওয়ার্ড মিলছে না'); btn.disabled=false; return; }
+    if(pass.length<4){ setSt('auth-st','err','পাসওয়ার্ড কমপক্ষে ৪ অক্ষর'); btn.disabled=false; return; }
+    
+    btn.textContent='⏳ তৈরি হচ্ছে...';
+    setSt('auth-st','info','অ্যাকাউন্ট তৈরি হচ্ছে...');
+    
+    console.log('Calling signup API...');
+    var r=await POST({action:'signup',name:name,email:email,password:pass});
+    console.log('Signup response:', r);
+    
+    btn.disabled=false; btn.textContent='অ্যাকাউন্ট তৈরি করুন';
+    
+    if(r.success){
+      setS(r.user); saveEmail(r.user);
+      setSt('auth-st','ok','✅ অ্যাকাউন্ট তৈরি! রিডাইরেক্ট হচ্ছে...');
+      setTimeout(function(){ closeM('auth-modal'); updateNav(); location.href='biodata.html?uid='+r.user.uid; },1200);
+    } else { 
+      setSt('auth-st','err','❌ '+r.error); 
+    }
+    
+  } else {
+    btn.textContent='⏳ লগইন হচ্ছে...';
+    setSt('auth-st','info','লগইন হচ্ছে...');
+    
+    console.log('Calling login API...');
+    var r=await POST({action:'login',email:email,password:pass});
+    console.log('Login response:', r);
+    
+    btn.disabled=false; btn.textContent='লগইন করুন';
+    
+    if(r.success){
+      setS(r.user); saveEmail(r.user);
+      setSt('auth-st','ok','✅ লগইন সফল!');
+      setTimeout(function(){ closeM('auth-modal'); updateNav(); loadBios(); },700);
+    } else { 
+      setSt('auth-st','err','❌ '+r.error); 
+    }
+  }
+}
+
+async function googleQuickAuth(){
+  setSt('auth-st','info','🔄 ব্রাউজার পারমিশন চাইছে...');
+  
+  // Try Credential Management API first
+  if(navigator.credentials && navigator.credentials.get){
+    try{
+      var cred=await navigator.credentials.get({
+        password:true,
+        federated:{providers:['https://accounts.google.com']},
+        mediation:'optional'
+      });
+      
+      if(cred && cred.id){
+        setSt('auth-st','info','⏳ লগইন হচ্ছে...');
+        var email=cred.id, name=cred.name||email.split('@')[0];
+        var r=await POST({action:'googleAuth',email:email,name:name});
+        if(r.success){
+          setS(r.user); saveEmail(r.user);
+          setSt('auth-st','ok','✅ লগইন সফল!');
+          setTimeout(function(){ closeM('auth-modal'); updateNav(); loadBios(); },700);
+          return;
+        } else {
+          setSt('auth-st','err','❌ '+r.error);
+          return;
+        }
+      }
+    }catch(e){
+      console.log('Credential API error:',e);
+    }
+  }
+  
+  // Fallback: manual email input
+  setSt('auth-st','','');
+  var email=prompt('আপনার ইমেইল ঠিকানা দিন:','');
+  if(!email||!email.includes('@')){ setSt('auth-st','err','সঠিক ইমেইল দিন'); return; }
+  
+  var name=prompt('আপনার নাম দিন:',email.split('@')[0]);
+  if(!name) name=email.split('@')[0];
+  
+  setSt('auth-st','info','⏳ অ্যাকাউন্ট চেক হচ্ছে...');
+  var r=await POST({action:'googleAuth',email:email,name:name});
+  if(r.success){
+    setS(r.user); saveEmail(r.user);
+    setSt('auth-st','ok','✅ লগইন সফল!');
+    setTimeout(function(){ closeM('auth-modal'); updateNav(); loadBios(); },700);
+  } else { setSt('auth-st','err','❌ '+r.error); }
+}
+
+// ── ADMIN ──
+function openAdminLogin(){ setSt('adm-login-st','',''); openM('adm-login-modal'); setTimeout(function(){document.getElementById('adm-pw').focus();},120); }
+
+async function submitAdminLogin(){
+  var pw=document.getElementById('adm-pw').value;
+  if(!pw){ setSt('adm-login-st','err','পাসওয়ার্ড দিন'); return; }
+  var btn=document.querySelector('#adm-login-modal button.msbtn');
+  if(!btn) btn=document.querySelector('#adm-login-modal .msbtn');
+  if(btn){ btn.disabled=true; btn.textContent='⏳...'; }
+  var r=await POST({action:'adminLogin',password:pw});
+  if(btn){ btn.disabled=false; btn.textContent='প্রবেশ করুন'; }
+  if(r.success){
+    adminToken=r.adminToken;
+    closeM('adm-login-modal');
+    document.getElementById('adm-overlay').classList.add('open');
+    loadAdminData();
+  } else { setSt('adm-login-st','err','❌ '+r.error); }
+}
+
+function closeAdmin(){ document.getElementById('adm-overlay').classList.remove('open'); }
+
+document.getElementById('adm-tabs').addEventListener('click',function(e){
+  var b=e.target.closest('.atab'); if(!b) return;
+  document.querySelectorAll('.atab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.atab-body').forEach(function(t){t.classList.remove('on');});
+  b.classList.add('on');
+  document.getElementById('abt-'+b.dataset.t).classList.add('on');
 });
 
-function doLogin(){
-  const u=document.getElementById('lu').value.trim();
-  const p=document.getElementById('lp').value;
-  if(u===S.auth.user && p===S.auth.pass){
-    isAdmin=true;
-    closeLoginModal();
-    document.getElementById('loginErr').style.display='none';
-    document.getElementById('adminTabs').style.display='flex';
-    document.getElementById('adminBadge').style.display='inline';
-    document.getElementById('adminToggleBtn').style.display='none';
-    document.getElementById('logoutBtn').style.display='block';
-    showAdminPage('builderPage',null);
-    renderBuilder();
-    loadAdminInputs();
-  } else {
-    document.getElementById('loginErr').style.display='block';
-    document.getElementById('lp').value='';
-    document.getElementById('lp').focus();
+async function loadAdminData(){
+  if(!adminToken) return;
+  var r=await GET({action:'adminGetAll',adminToken:adminToken});
+  if(!r.success){ alert('অ্যাডমিন লোড ব্যর্থ: '+r.error); return; }
+
+  // Users table
+  var tbody=document.getElementById('adm-users-body');
+  if(!r.users||!r.users.length){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mt)">কোনো ব্যবহারকারী নেই</td></tr>'; }
+  else {
+    tbody.innerHTML=r.users.map(function(u){
+      var av=u.photo?'<div class="adm-av"><img src="'+esc(u.photo)+'" onerror="this.style.display=\'none\'"></div>':'<div class="adm-av">'+((u.name||'?')[0])+'</div>';
+      var sb=u.userStatus==='active'?'sb-active':u.userStatus==='hidden'?'sb-hidden':'sb-deleted';
+      var stLabel=u.userStatus==='active'?'সক্রিয়':u.userStatus==='hidden'?'হাইড':'ডিলিট';
+      return '<tr>'
+        +'<td>'+av+'</td>'
+        +'<td><strong>'+esc(u.name)+'</strong></td>'
+        +'<td style="color:var(--mt);font-size:.78rem">'+esc(u.email)+'</td>'
+        +'<td>'+esc(u.profession||'—')+'</td>'
+        +'<td style="font-size:.75rem;color:var(--mt)">'+esc((u.created||'').substring(0,10))+'</td>'
+        +'<td><span class="status-badge '+sb+'">'+stLabel+'</span></td>'
+        +'<td><div class="adm-acts">'
+          +'<button class="abtn abtn-view" onclick="window.open(\'biodata.html?uid='+esc(u.uid)+'\',\'_blank\')">👁️ দেখুন</button>'
+          +(u.userStatus==='active'
+            ?'<button class="abtn abtn-hide" onclick="adminDo(\'hide\',\''+esc(u.uid)+'\')">🙈 হাইড</button>'
+            :'<button class="abtn abtn-hide" onclick="adminDo(\'unhide\',\''+esc(u.uid)+'\')">👁 দেখাও</button>')
+          +(u.userStatus!=='deleted'
+            ?'<button class="abtn abtn-del" onclick="adminDo(\'delete\',\''+esc(u.uid)+'\')">🗑️ ডিলিট</button>'
+            :'')
+        +'</div></td>'
+        +'</tr>';
+    }).join('');
   }
-}
-function logout(){
-  isAdmin=false;
-  document.getElementById('adminTabs').style.display='none';
-  document.getElementById('adminBadge').style.display='none';
-  document.getElementById('adminToggleBtn').style.display='block';
-  document.getElementById('logoutBtn').style.display='none';
-  showPage('viewPage',document.querySelector('#publicTabs .nav-tab'));
-}
-function goHome(){
-  if(isAdmin) showAdminPage('builderPage',null);
-  else showPage('viewPage',document.querySelector('#publicTabs .nav-tab'));
-}
 
-// ══════════════════════════════════════════════
-//  PAGE ROUTING
-// ══════════════════════════════════════════════
-const PUBLIC_PAGES=['viewPage','galleryPage','contactPage'];
-const ADMIN_PAGES=['builderPage','adminGalleryPage','adminContactPage','settingsPage','loginPage'];
-
-function showPage(id, btn){
-  [...document.querySelectorAll('.page')].forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  [...document.querySelectorAll('#publicTabs .nav-tab')].forEach(t=>t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  if(id==='viewPage') renderView();
-  if(id==='galleryPage') renderPublicGallery();
-  if(id==='contactPage') renderContactInfo();
-}
-function showAdminPage(id, btn){
-  [...document.querySelectorAll('.page')].forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  [...document.querySelectorAll('#adminTabs .nav-tab')].forEach(t=>t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  if(id==='builderPage') renderBuilder();
-  if(id==='adminGalleryPage') loadAdminInputs();
-  if(id==='adminContactPage') loadAdminInputs();
-  if(id==='settingsPage') loadAdminInputs();
-}
-
-// ══════════════════════════════════════════════
-//  PUBLIC PROFILE VIEW
-// ══════════════════════════════════════════════
-function renderView(){
-  const p=S.profile;
-  document.getElementById('heroName').textContent = p.name||'বায়োডাটা';
-  document.getElementById('heroSub').textContent  = p.sub||'';
-  document.getElementById('heroMeta').textContent = p.meta||'';
-  document.title = p.name ? p.name+' — বায়োডাটা' : 'বায়োডাটা';
-  const av=document.getElementById('heroAvatar');
-  av.innerHTML = p.photo
-    ? `<img src="${p.photo}" onerror="this.parentElement.textContent='😊'">`
-    : '😊';
-  const vs=document.getElementById('viewSections');
-  const filled=S.sections.filter(s=>s.fields.some(f=>f.label||f.value));
-  if(!filled.length){
-    vs.innerHTML=`<div class="empty-state"><div class="ei">📝</div><p>বায়োডাটা তৈরি করা হয়নি।</p></div>`;
-    return;
+  // Messages
+  var ml=document.getElementById('adm-msgs-list');
+  if(!r.messages||!r.messages.length){ ml.innerHTML='<div style="text-align:center;padding:2rem;color:var(--mt)">কোনো বার্তা নেই</div>'; }
+  else {
+    ml.innerHTML=r.messages.map(function(m){
+      return '<div class="adm-msg-card">'
+        +'<div class="adm-msg-head"><strong>'+esc(m.fromName)+'</strong><span>'+esc(m.date)+'</span></div>'
+        +'<div style="font-size:.74rem;color:var(--mt);margin-bottom:.35rem">📧 '+esc(m.fromEmail)+' → 📨 '+esc(m.toName)+'</div>'
+        +'<div style="font-size:.75rem;color:var(--gold);margin-bottom:.3rem">📌 '+esc(m.subject)+'</div>'
+        +'<p>'+esc(m.message)+'</p>'
+        +(m.files?'<p style="margin-top:.3rem;font-size:.73rem;color:var(--teal)">📎 '+esc(m.files)+'</p>':'')
+        +'</div>';
+    }).join('');
   }
-  vs.innerHTML=filled.map(sec=>`
-    <div class="vs-card">
-      <div class="vs-title">${sec.icon} ${esc(sec.name)}</div>
-      <div class="vs-fields">
-        ${sec.fields.filter(f=>f.label||f.value).map(f=>`
-          <div>
-            <div class="vf-label">${esc(f.label)}</div>
-            <div class="vf-value">${esc(f.value)||'—'}</div>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
+  document.getElementById('s-u').textContent=r.totalUsers||0;
 }
 
-// ══════════════════════════════════════════════
-//  PUBLIC GALLERY
-// ══════════════════════════════════════════════
-async function renderPublicGallery(){
-  const grid=document.getElementById('galleryGrid');
-  const empty=document.getElementById('galleryEmpty');
-  const {folderId,apiKey}=S.gallery;
-  if(!folderId||!apiKey){
-    grid.innerHTML='';
-    empty.style.display='block';
-    empty.innerHTML='<div class="ei">🖼️</div><p>গ্যালারি এখনো সেট করা হয়নি।</p>';
-    return;
-  }
-  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px"><div class="spinner"></div></div>';
-  empty.style.display='none';
-  await fetchGallery(folderId,apiKey,grid,empty);
+async function adminDo(act, uid){
+  var labels={hide:'হাইড করবেন?',unhide:'দৃশ্যমান করবেন?',delete:'ডিলিট করবেন? এটি পূর্বাবস্থায় ফেরানো যাবে না।'};
+  if(!confirm(labels[act]||'নিশ্চিত?')) return;
+  var r=await POST({action:'adminAction',adminToken:adminToken,act:act,uid:uid});
+  var st=document.getElementById('adm-act-st');
+  if(r.success){ st.className='adm-st ok'; st.textContent='✅ '+r.message; loadAdminData(); }
+  else { st.className='adm-st err'; st.textContent='❌ '+r.error; }
 }
 
-async function fetchGallery(fid,apiKey,grid,empty){
-  try{
-    const realId=fid.includes('/folders/')? fid.split('/folders/')[1].split('?')[0].split('/')[0]: fid;
-    const url=`https://www.googleapis.com/drive/v3/files?q='${realId}'+in+parents+and+mimeType+contains+'image/'&key=${apiKey}&fields=files(id,name,thumbnailLink)&pageSize=50`;
-    const res=await fetch(url);
-    const data=await res.json();
-    if(data.error) throw new Error(data.error.message);
-    const files=data.files||[];
-    if(!files.length){
-      grid.innerHTML='';
-      empty.style.display='block';
-      empty.innerHTML='<div class="ei">🖼️</div><p>ফোল্ডারে ছবি নেই।</p>';
-      return;
-    }
-    grid.innerHTML=files.map(f=>`
-      <div class="gi" onclick="window.open('https://drive.google.com/file/d/${f.id}/view','_blank')">
-        <img src="${f.thumbnailLink||`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`}"
-          loading="lazy"
-          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%2322213a%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2240%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🖼️</text></svg>'">
-        <div class="gi-cap">${esc(f.name)}</div>
-      </div>`).join('');
-  }catch(e){
-    grid.innerHTML='';
-    empty.style.display='block';
-    empty.innerHTML=`<div class="ei">⚠️</div><p>${e.message}</p>`;
+// ── LOAD BIOS ──
+async function loadBios(){
+  try {
+    var r=await GET({action:'getAllBios'});
+    if(!r.success){ document.getElementById('grid').innerHTML='<div class="bd-empty">লোড ব্যর্থ: '+esc(r.error)+'</div>'; return; }
+    bios=r.data||[];
+    document.getElementById('s-b').textContent=bios.length;
+    document.getElementById('s-u').textContent=r.totalUsers||bios.length;
+    render();
+  } catch(e){
+    document.getElementById('grid').innerHTML='<div class="bd-empty">⚠️ API URL সেট করুন<br><small style="font-size:.75rem">index.html ও biodata.html-এ var API লাইন আপডেট করুন</small></div>';
   }
 }
 
-// ══════════════════════════════════════════════
-//  CONTACT
-// ══════════════════════════════════════════════
-function renderContactInfo(){
-  const el=document.getElementById('contactOwnerInfo');
-  el.textContent=S.contact.ownerInfo||'';
-}
-function handleFiles(files){for(const f of files) selectedFiles.push(f);renderFileList();}
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('dropZone').classList.remove('drag');
-  handleFiles(e.dataTransfer.files);
-}
-function renderFileList(){
-  document.getElementById('fileList').innerHTML=selectedFiles.map((f,i)=>`
-    <div class="file-chip">
-      <span>📎 ${esc(f.name)} (${(f.size/1024).toFixed(1)} KB)</span>
-      <button onclick="selectedFiles.splice(${i},1);renderFileList()" style="background:none;border:none;color:var(--danger);cursor:pointer">✕</button>
-    </div>`).join('');
-}
-async function submitContact(){
-  const name=document.getElementById('cf_name').value.trim();
-  const email=document.getElementById('cf_email').value.trim();
-  const message=document.getElementById('cf_message').value.trim();
-  const url=S.contact.scriptUrl;
-  const st=document.getElementById('sendStatus');
-  if(!name||!email||!message){toast('❌ নাম, ইমেইল ও বার্তা আবশ্যক','err');return;}
-  if(!url){toast('❌ Apps Script URL সেট করা নেই','err');return;}
-  st.className='send-status';st.style.display='block';
-  st.innerHTML='<span class="spinner"></span> পাঠানো হচ্ছে...';
-  const fi=selectedFiles.map(f=>f.name).join(', ');
-  const params=new URLSearchParams({name,email,message,fileInfo:fi});
-  try{
-    await fetch(url+'?'+params,{method:'GET',mode:'no-cors'});
-    st.className='send-status ok';
-    st.innerHTML='✅ বার্তা পাঠানো হয়েছে! ধন্যবাদ।';
-    document.getElementById('cf_name').value='';
-    document.getElementById('cf_email').value='';
-    document.getElementById('cf_message').value='';
-    selectedFiles=[];renderFileList();
-  }catch(e){
-    st.className='send-status err';
-    st.innerHTML='❌ ব্যর্থ: '+e.message;
-  }
-}
-
-// ══════════════════════════════════════════════
-//  ADMIN: BUILDER
-// ══════════════════════════════════════════════
-const ICONS=['📚','👨‍👩‍👧','💼','⭐','🏆','💡','🌍','🎯','✍️','🏅','🤝','📋','🎨','🏃','🍳'];
-let iconIdx=0;
-
-function addSection(){
-  const inp=document.getElementById('newSectionName');
-  const name=inp.value.trim();
-  if(!name)return;
-  S.sections.push({id:Date.now(),icon:ICONS[iconIdx++%ICONS.length],name,fields:[]});
-  inp.value='';
-  renderBuilder();
-}
-function removeSection(id){S.sections=S.sections.filter(s=>s.id!==id);renderBuilder();}
-function addField(sid){
-  const sec=S.sections.find(s=>s.id===sid);
-  if(sec) sec.fields.push({id:Date.now(),label:'',value:''});
-  renderBuilder();
-  setTimeout(()=>openSection(sid),30);
-}
-function removeField(sid,fid){
-  const sec=S.sections.find(s=>s.id===sid);
-  if(sec) sec.fields=sec.fields.filter(f=>f.id!==fid);
-  renderBuilder();
-  setTimeout(()=>openSection(sid),30);
-}
-function openSection(sid){
-  const card=document.querySelector(`[data-sid="${sid}"]`);
-  if(!card)return;
-  card.querySelector('.sc-body').classList.add('open');
-  card.querySelector('.sc-toggle').classList.add('open');
-}
-function toggleSection(sid){
-  const card=document.querySelector(`[data-sid="${sid}"]`);
-  card.querySelector('.sc-body').classList.toggle('open');
-  card.querySelector('.sc-toggle').classList.toggle('open');
-}
-function renderBuilder(){
-  const list=document.getElementById('sectionsList');
-  list.innerHTML='';
-  S.sections.forEach(sec=>{
-    const card=document.createElement('div');
-    card.className='sc';card.dataset.sid=sec.id;
-    card.innerHTML=`
-      <div class="sc-header" onclick="toggleSection(${sec.id})">
-        <span style="font-size:1.1rem">${sec.icon}</span>
-        <input class="sc-name" value="${esc(sec.name)}"
-          onclick="event.stopPropagation()"
-          oninput="S.sections.find(s=>s.id===${sec.id}).name=this.value"
-          placeholder="সেকশনের নাম">
-        <span class="tag-badge">${sec.fields.length}টি ফিল্ড</span>
-        <span class="sc-toggle">▾</span>
-      </div>
-      <div class="sc-body">
-        <div class="fields-list">
-          ${sec.fields.map(f=>`
-            <div class="field-row" data-fid="${f.id}">
-              <div class="field-inner">
-                <input class="full" placeholder="ফিল্ড লেবেল (যেমন: স্কুলের নাম)"
-                  value="${esc(f.label)}"
-                  oninput="updateField(${sec.id},${f.id},'label',this.value)">
-                <input class="full" placeholder="বিবরণ / মান"
-                  value="${esc(f.value)}"
-                  oninput="updateField(${sec.id},${f.id},'value',this.value)">
-              </div>
-              <button class="remove-btn" onclick="removeField(${sec.id},${f.id})">✕</button>
-            </div>`).join('')||'<p style="color:var(--muted);font-size:.86rem">এখনো কোনো ফিল্ড নেই।</p>'}
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="add-field-btn" onclick="addField(${sec.id})">+ ফিল্ড যোগ করুন</button>
-          <button class="btn btn-danger btn-sm" onclick="removeSection(${sec.id})">🗑 মুছুন</button>
-        </div>
-      </div>`;
-    list.appendChild(card);
+function render(){
+  var q=(document.getElementById('q').value||'').toLowerCase();
+  var list=filter==='all'?bios:bios.filter(function(b){return (b.occupation||'other')===filter;});
+  if(q) list=list.filter(function(b){
+    return (b.name||'').toLowerCase().includes(q)||(b.profession||'').toLowerCase().includes(q)||(b.currentAddress||'').toLowerCase().includes(q);
   });
-}
-function updateField(sid,fid,key,val){
-  const sec=S.sections.find(s=>s.id===sid);
-  if(sec){const f=sec.fields.find(f=>f.id===fid);if(f)f[key]=val;}
-}
-function saveData(){
-  // collect all live inputs
-  S.sections.forEach(sec=>{
-    const card=document.querySelector(`[data-sid="${sec.id}"]`);
-    if(!card)return;
-    sec.name=card.querySelector('.sc-name').value;
-    sec.fields.forEach(f=>{
-      const row=card.querySelector(`[data-fid="${f.id}"]`);
-      if(!row)return;
-      const ins=row.querySelectorAll('input');
-      f.label=ins[0]?.value||'';f.value=ins[1]?.value||'';
-    });
-  });
-  saveState();
-  toast('✅ সংরক্ষণ ও প্রকাশ সফল হয়েছে!','ok');
+  var g=document.getElementById('grid');
+  if(!list.length){ g.innerHTML='<div class="bd-empty">🔍 কোনো বায়োডাটা পাওয়া যায়নি</div>'; return; }
+  g.innerHTML=list.map(function(b){
+    var photo=b.photo?'<img src="'+esc(b.photo)+'" alt="" onerror="this.style.display=\'none\'">':'';
+    var letter=(b.name||'?')[0];
+    return '<a class="bdc" href="biodata.html?uid='+esc(b.uid)+'">'
+      +'<div class="av-ring"><div class="av-in">'+(photo||'<span>'+esc(letter)+'</span>')+'</div></div>'
+      +'<p class="cn">'+esc(b.name||'নাম নেই')+'</p>'
+      +'<p class="cj">'+esc(b.profession||'পেশা উল্লেখ নেই')+'</p>'
+      +'<p class="cl">📍 '+esc(b.currentAddress||'ঠিকানা নেই')+'</p>'
+      +'<div class="cb2">'
+        +(b.education?'<span>🎓 '+esc(b.education.substring(0,15))+'</span>':'')
+        +(b.maritalStatus?'<span>'+esc(b.maritalStatus)+'</span>':'')
+      +'</div>'
+      +'<div class="cvb">বিস্তারিত দেখুন →</div>'
+      +'</a>';
+  }).join('');
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: GALLERY CONFIG
-// ══════════════════════════════════════════════
-function saveGalleryConfig(){
-  S.gallery.folderId=document.getElementById('driveFolderId').value.trim();
-  S.gallery.apiKey=document.getElementById('driveApiKey').value.trim();
-  saveState();toast('✅ গ্যালারি সেটিংস সংরক্ষণ হয়েছে','ok');
-}
-async function testGallery(){
-  const fid=document.getElementById('driveFolderId').value.trim();
-  const apiKey=document.getElementById('driveApiKey').value.trim();
-  if(!fid||!apiKey){toast('❌ উভয় ফিল্ড পূরণ করুন','err');return;}
-  const res=document.getElementById('galleryTestResult');
-  res.innerHTML='<p style="color:var(--muted);margin-top:12px"><span class="spinner"></span> পরীক্ষা করা হচ্ছে...</p>';
-  const grid=document.createElement('div');grid.className='gallery-grid';
-  const empty=document.createElement('div');empty.className='empty-state';
-  res.appendChild(grid);res.appendChild(empty);
-  await fetchGallery(fid,apiKey,grid,empty);
-}
+document.getElementById('ftabs').addEventListener('click',function(e){
+  var b=e.target.closest('.ftab'); if(!b) return;
+  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('on');});
+  b.classList.add('on'); filter=b.dataset.f; render();
+});
 
-// ══════════════════════════════════════════════
-//  ADMIN: CONTACT CONFIG
-// ══════════════════════════════════════════════
-function saveContactConfig(){
-  S.contact.scriptUrl=document.getElementById('scriptUrl').value.trim();
-  S.contact.ownerInfo=document.getElementById('ownerInfo').value.trim();
-  saveState();toast('✅ যোগাযোগ সেটিংস সংরক্ষণ হয়েছে','ok');
+// ── helpers ──
+function v(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+function setSt(id,type,msg){
+  var el=document.getElementById(id);
+  if(!type){ el.style.display='none'; return; }
+  el.className='mst '+type; el.textContent=msg;
 }
-function toggleGuide(id){
-  const el=document.getElementById(id);
-  el.style.display=el.style.display==='none'?'block':'none';
-}
+document.querySelectorAll('.modal').forEach(function(m){ m.addEventListener('click',function(e){ if(e.target===m) m.classList.remove('open'); }); });
+document.getElementById('fp').addEventListener('keydown',function(e){ if(e.key==='Enter') submitAuth(); });
+document.getElementById('adm-pw').addEventListener('keydown',function(e){ if(e.key==='Enter') submitAdminLogin(); });
 
-// ══════════════════════════════════════════════
-//  ADMIN: SETTINGS
-// ══════════════════════════════════════════════
-function loadAdminInputs(){
-  const p=S.profile;
-  setVal('s_name',p.name);setVal('s_sub',p.sub);
-  setVal('s_meta',p.meta);setVal('s_photo',p.photo);
-  setVal('s_user',S.auth.user);setVal('s_pass','');
-  setVal('driveFolderId',S.gallery.folderId);
-  setVal('driveApiKey',S.gallery.apiKey);
-  setVal('scriptUrl',S.contact.scriptUrl);
-  setVal('ownerInfo',S.contact.ownerInfo);
-}
-function saveSettings(){
-  S.profile.name  = getVal('s_name');
-  S.profile.sub   = getVal('s_sub');
-  S.profile.meta  = getVal('s_meta');
-  S.profile.photo = getVal('s_photo');
-  const nu=getVal('s_user'); if(nu) S.auth.user=nu;
-  const np=getVal('s_pass'); if(np) S.auth.pass=np;
-  saveState();renderView();
-  toast('✅ সেটিংস সংরক্ষণ হয়েছে','ok');
-}
-function getVal(id){return document.getElementById(id)?.value||''}
-function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v||'';}
+// Scroll reveal
+var obs=new IntersectionObserver(function(en){ en.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); }); },{threshold:.07});
+document.querySelectorAll('.rv').forEach(function(el){ obs.observe(el); });
 
-// ══════════════════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════════════════
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(msg,type='ok'){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+type+' show';
-  setTimeout(()=>t.classList.remove('show'),3200);
-}
-
-// ══════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════
-// Seed demo sections if empty
-if(!S.sections.length){
-  S.sections=[
-    {id:1,icon:'📚',name:'শিক্ষাগত তথ্য',fields:[
-      {id:11,label:'স্কুলের নাম',value:''},
-      {id:12,label:'ঠিকানা',value:''},
-      {id:13,label:'পাশের সাল',value:''},
-      {id:14,label:'বিষয়/বিভাগ',value:''},
-    ]},
-    {id:2,icon:'👨‍👩‍👧',name:'পারিবারিক তথ্য',fields:[
-      {id:21,label:'পিতার নাম',value:''},
-      {id:22,label:'মাতার নাম',value:''},
-      {id:23,label:'ভাই-বোন',value:''},
-    ]},
-    {id:3,icon:'💼',name:'কর্মক্ষেত্র',fields:[
-      {id:31,label:'প্রতিষ্ঠানের নাম',value:''},
-      {id:32,label:'পদবি',value:''},
-      {id:33,label:'যোগদানের সাল',value:''},
-    ]},
-  ];
-  saveState();
-}
-renderView();
+updateNav();
+testAPI(); // API connection test
+loadBios();
 </script>
 </body>
 </html>
