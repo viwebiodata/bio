@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বায়োডাটা তৈরি করুন — বায়োডাটা প্ল্যাটফর্ম</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--gold:#F5B800;--glow:rgba(245,184,0,.13);--bg:#0A0D12;--s1:#12171F;--s2:#1A2030;--bd:rgba(255,255,255,.07);--bdg:rgba(245,184,0,.28);--tx:#EEF0F4;--mu:#6B7585;--mu2:#9AA3B0;--r:12px;--rs:8px;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;line-height:1.65;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--s2);border-radius:99px;}
+
+        #toast-wrap{position:fixed;top:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+        .toast{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--bd);padding:13px 16px;border-radius:var(--rs);font-size:14px;min-width:270px;max-width:340px;pointer-events:all;animation:tIn .3s ease;box-shadow:0 8px 28px rgba(0,0,0,.45);}
+        .toast.success{border-color:rgba(52,212,153,.35);}.toast.error{border-color:rgba(255,92,92,.35);}
+        .tx{margin-left:auto;background:none;border:none;color:var(--mu);cursor:pointer;font-size:17px;}
+        @keyframes tIn{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes tOut{to{opacity:0;transform:translateX(36px)}}
+
+        nav{background:rgba(10,13,18,.88);backdrop-filter:blur(16px);padding:13px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100;}
+        .logo{font-family:'Noto Serif Bengali',serif;font-size:21px;font-weight:600;color:var(--gold);text-decoration:none;}
+        .back-link{display:flex;align-items:center;gap:8px;color:var(--mu2);text-decoration:none;font-size:14px;padding:7px 14px;border:1px solid var(--bd);border-radius:var(--rs);transition:all .2s;}
+        .back-link:hover{border-color:var(--bdg);color:var(--gold);}
+        .user-info{display:flex;align-items:center;gap:10px;}
+        .uchip{display:flex;align-items:center;gap:7px;padding:5px 12px;background:var(--glow);border:1px solid var(--bdg);border-radius:99px;font-size:13px;}
+        .uchip .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+        .btn{padding:8px 17px;border-radius:var(--rs);border:none;cursor:pointer;font-weight:600;font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;}
+        .bg{background:var(--gold);color:#0A0D12;}.bg:hover{background:#FFC41A;transform:translateY(-1px);box-shadow:0 4px 18px rgba(245,184,0,.3);}
+        .bd2{background:transparent;color:#FF5C5C;border:1px solid rgba(255,92,92,.25);font-size:13px;}.bd2:hover{background:rgba(255,92,92,.08);}
+        .bfw{width:100%;justify-content:center;padding:14px;font-size:16px;}
+        .bl{opacity:.65;pointer-events:none;}
+        .sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#0A0D12;border-radius:50%;animation:sp .7s linear infinite;}
+        @keyframes sp{to{transform:rotate(360deg)}}
+
+        /* Page layout */
+        .page{max-width:780px;margin:0 auto;padding:36px 20px 60px;}
+
+        .page-head{margin-bottom:32px;}
+        .page-head h1{font-family:'Noto Serif Bengali',serif;font-size:28px;font-weight:600;margin-bottom:6px;}
+        .page-head p{color:var(--mu2);font-size:15px;}
+
+        /* Progress */
+        .progress{display:flex;gap:0;margin-bottom:36px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;}
+        .prog-step{flex:1;padding:14px;text-align:center;font-size:13px;color:var(--mu);cursor:pointer;transition:all .2s;border-right:1px solid var(--bd);}
+        .prog-step:last-child{border-right:none;}
+        .prog-step.active{background:var(--glow);color:var(--gold);font-weight:600;}
+        .prog-step.done{background:rgba(52,212,153,.07);color:#34D499;}
+        .prog-num{display:block;font-size:18px;margin-bottom:2px;}
+
+        /* Form sections */
+        .fsec{display:none;}
+        .fsec.active{display:block;}
+
+        .fcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:28px;margin-bottom:22px;}
+        .fcard-title{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+
+        /* Grid layouts */
+        .fg2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+        .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+        @media(max-width:560px){.fg2,.fg3{grid-template-columns:1fr;}}
+
+        .fg{margin-bottom:0;}
+        .fg label{display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:var(--mu2);}
+        .fg label span{color:#FF5C5C;margin-left:2px;}
+        .fg input,.fg select,.fg textarea{width:100%;padding:11px 13px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:border-color .2s;}
+        .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--bdg);box-shadow:0 0 0 3px rgba(245,184,0,.07);}
+        .fg input::placeholder,.fg textarea::placeholder{color:var(--mu);}
+        .fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236B7585' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;}
+        .fg select option{background:var(--s1);}
+        .fg textarea{resize:vertical;min-height:100px;line-height:1.6;}
+
+        /* Photo upload */
+        .photo-zone{display:flex;flex-direction:column;align-items:center;gap:16px;}
+        .photo-preview{width:110px;height:110px;border-radius:50%;background:var(--s2);border:2px dashed var(--bdg);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:border-color .2s;position:relative;}
+        .photo-preview:hover{border-color:var(--gold);}
+        .photo-preview img{width:100%;height:100%;object-fit:cover;}
+        .photo-preview .photo-placeholder{text-align:center;color:var(--mu);}
+        .photo-placeholder span{font-size:32px;display:block;margin-bottom:4px;}
+        .photo-placeholder small{font-size:11px;}
+        .photo-actions{display:flex;gap:10px;align-items:center;}
+        #photo-input{display:none;}
+        .photo-hint{font-size:12px;color:var(--mu);text-align:center;}
+
+        /* Navigation buttons */
+        .nav-btns{display:flex;gap:12px;justify-content:space-between;margin-top:8px;}
+        .btn-prev{background:transparent;color:var(--mu2);border:1px solid var(--bd);}.btn-prev:hover{border-color:var(--bdg);color:var(--gold);}
+
+        /* Auth guard */
+        #auth-guard{display:none;text-align:center;padding:80px 20px;}
+        .guard-icon{font-size:56px;margin-bottom:18px;}
+        #auth-guard h2{font-family:'Noto Serif Bengali',serif;font-size:24px;margin-bottom:10px;color:var(--gold);}
+        #auth-guard p{color:var(--mu2);margin-bottom:24px;font-size:15px;}
+
+        /* Preview card */
+        .preview-card{background:var(--s2);border:1px solid var(--bdg);border-radius:var(--r);padding:24px;margin-bottom:24px;}
+        .prev-top{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+        .prev-av{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--bdg);background:var(--glow);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:var(--gold);font-family:'Noto Serif Bengali',serif;flex-shrink:0;}
+        .prev-name{font-size:20px;font-weight:600;margin-bottom:4px;}
+        .prev-sub{font-size:14px;color:var(--mu2);}
+        .prev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+        .prev-item label{font-size:12px;color:var(--mu);display:block;margin-bottom:2px;}
+        .prev-item span{font-size:14px;color:var(--tx);}
+
+        footer{text-align:center;padding:24px;color:var(--mu);border-top:1px solid var(--bd);font-size:13px;}
+    </style>
+</head>
+<body>
+<div id="toast-wrap"></div>
+
+<nav>
+    <a href="biodata-platform.html" class="logo">বায়োডাটা</a>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <div class="uchip" id="uchip"><div class="dot"></div><span id="uname">ব্যবহারকারী</span></div>
+        <button class="btn bd2" onclick="doLogout()" style="font-size:13px;padding:7px 13px;">লগআউট</button>
+        <a href="biodata-platform.html" class="back-link">← ফিরে যান</a>
+    </div>
+</nav>
+
+<!-- Auth Guard (shown if not logged in) -->
+<div id="auth-guard">
+    <div class="guard-icon">🔐</div>
+    <h2>লগইন প্রয়োজন</h2>
+    <p>বায়োডাটা তৈরি করতে আপনাকে প্রথমে লগইন করতে হবে।</p>
+    <a href="biodata-platform.html" class="btn bg">🏠 হোম পেজে ফিরুন ও লগইন করুন</a>
+</div>
+
+<!-- Main Form (shown if logged in) -->
+<div id="form-area" style="display:none">
+<div class="page">
+    <div class="page-head">
+        <h1>📝 আপনার বায়োডাটা তৈরি করুন</h1>
+        <p>তথ্যগুলো সঠিকভাবে পূরণ করুন — এটি সবাই দেখতে পাবে।</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress">
+        <div class="prog-step active" id="step-1" onclick="goStep(1)"><span class="prog-num">①</span>ব্যক্তিগত</div>
+        <div class="prog-step" id="step-2" onclick="goStep(2)"><span class="prog-num">②</span>শিক্ষা ও পেশা</div>
+        <div class="prog-step" id="step-3" onclick="goStep(3)"><span class="prog-num">③</span>পরিবার</div>
+        <div class="prog-step" id="step-4" onclick="goStep(4)"><span class="prog-num">④</span>যোগাযোগ</div>
+        <div class="prog-step" id="step-5" onclick="goStep(5)"><span class="prog-num">⑤</span>প্রিভিউ</div>
+    </div>
+
+    <!-- Section 1: Personal -->
+    <div class="fsec active" id="sec-1">
+        <div class="fcard">
+            <div class="fcard-title">📸 প্রোফাইল ছবি</div>
+            <div class="photo-zone">
+                <div class="photo-preview" onclick="document.getElementById('photo-input').click()" id="photo-preview-box">
+                    <div class="photo-placeholder"><span>📷</span><small>ছবি যোগ করুন</small></div>
+                </div>
+                <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(this)">
+                <div class="photo-actions">
+                    <button class="btn" style="background:var(--s2);border:1px solid var(--bd);font-size:13px;padding:7px 14px;" onclick="document.getElementById('photo-input').click()">📁 ছবি বাছাই করুন</button>
+                    <button class="btn" style="background:transparent;border:1px solid rgba(255,92,92,.3);color:#FF5C5C;font-size:13px;padding:7px 14px;" onclick="clearPhoto()">🗑️ মুছুন</button>
+                </div>
+                <p class="photo-hint">JPG বা PNG ফরম্যাট, সর্বোচ্চ ৫ MB</p>
+            </div>
+        </div>
+
+        <div class="fcard">
+            <div class="fcard-title">👤 ব্যক্তিগত তথ্য</div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>পূর্ণ নাম <span>*</span></label><input type="text" id="f-name" placeholder="আপনার পূর্ণ নাম"></div>
+                <div class="fg"><label>বয়স <span>*</span></label><input type="number" id="f-age" placeholder="২৫" min="18" max="80"></div>
+            </div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>লিঙ্গ <span>*</span></label>
+                    <select id="f-gender">
+                        <option value="">বাছাই করুন</option>
+                        <option>পুরুষ</option>
+                        <option>মহিলা</option>
+                        <option>অন্যান্য</option>
+                    </select>
+                </div>
+                <div class="fg"><label>ধর্ম <span>*</span></label>
+                    <select id="f-religion">
+                        <option value="">বাছাই করুন</option>
+                        <option>ইসলাম</option>
+                        <option>হিন্দু</option>
+                        <option>খ্রিষ্টান</option>
+                        <option>বৌদ্ধ</option>
+                        <option>অন্যান্য</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fg2">
+                <div class="fg"><label>বৈবাহিক অবস্থা</label>
+                    <select id="f-marital">
+                        <option value="">বাছাই করুন</option>
+                        <option>অবিবাহিত</option>
+                        <option>বিবাহিত</option>
+                        <option>বিধবা/বিপত্নীক</option>
+                        <option>তালাকপ্রাপ্ত</option>
+                    </select>
+                </div>
+                <div class="fg"><label>রক্তের গ্রুপ</label>
+                    <select id="f-blood">
+                        <option value="">বাছাই করুন</option>
+                        <option>A+</option><option>A-</option>
+                        <option>B+</option><option>B-</option>
+                        <option>AB+</option><option>AB-</option>
+                        <option>O+</option><option>O-</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-btns">
+            <div></div>
+            <button class="btn bg" onclick="nextStep(1)">পরবর্তী: শিক্ষা ও পেশা →</button>
+        </div>
+    </div>
+
+    <!-- Section 2: Education & Profession -->
+    <div class="fsec" id="sec-2">
+        <div class="fcard">
+            <div class="fcard-title">🎓 শিক্ষাগত যোগ্যতা</div>
+            <div class="fg" style="margin-bottom:16px"><label>সর্বোচ্চ শিক্ষা <span>*</span></label>
+                <select id="f-edu">
+                    <option value="">বাছাই করুন</option>
+                    <option>SSC</option><option>HSC</option>
+                    <option>ডিপ্লোমা</option>
+                    <option>স্নাতক (BA/BSc/BBA)</option>
+                    <option>স্নাতকোত্তর (MA/MSc/MBA)</option>
+                    <option>PhD</option>
+                    <option>হাফেজ</option>
+                    <option>আলেম</option>
+                    <option>অন্যান্য</option>
+                </select>
+            </div>
+            <div class="fg"><label>বিশ্ববিদ্যালয় / প্রতিষ্ঠানের নাম</label><input type="text" id="f-inst" placeholder="যেমন: ঢাকা বিশ্ববিদ্যালয়"></div>
+        </div>
+
+        <div class="fcard">
+            <div class="fcard-title">💼 পেশাগত তথ্য</div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>পেশা <span>*</span></label>
+                    <select id="f-prof">
+                        <option value="">বাছাই করুন</option>
+                        <option>শিক্ষার্থী</option>
+                        <option>সরকারি চাকরিজীবী</option>
+                        <option>বেসরকারি চাকরিজীবী</option>
+                        <option>ব্যবসায়ী</option>
+                        <option>শিক্ষক</option>
+                        <option>ডাক্তার</option>
+                        <option>ইঞ্জিনিয়ার</option>
+                        <option>কৃষক</option>
+                        <option>প্রবাসী</option>
+                        <option>গৃহিণী</option>
+                        <option>অন্যান্য</option>
+                    </select>
+                </div>
+                <div class="fg"><label>মাসিক আয় (টাকা)</label><input type="text" id="f-income" placeholder="যেমন: ৩০,০০০"></div>
+            </div>
+            <div class="fg"><label>কর্মস্থল / প্রতিষ্ঠান</label><input type="text" id="f-workplace" placeholder="যেমন: ব্র্যাক ব্যাংক, ঢাকা"></div>
+        </div>
+
+        <div class="fcard">
+            <div class="fcard-title">✍️ নিজের সম্পর্কে</div>
+            <div class="fg"><label>সংক্ষিপ্ত পরিচয়</label><textarea id="f-about" placeholder="নিজের সম্পর্কে কিছু লিখুন — আপনার পছন্দ, স্বভাব, ভবিষ্যৎ পরিকল্পনা..."></textarea></div>
+        </div>
+
+        <div class="nav-btns">
+            <button class="btn btn-prev" onclick="goStep(1)">← ব্যক্তিগত</button>
+            <button class="btn bg" onclick="nextStep(2)">পরবর্তী: পরিবার →</button>
+        </div>
+    </div>
+
+    <!-- Section 3: Family -->
+    <div class="fsec" id="sec-3">
+        <div class="fcard">
+            <div class="fcard-title">🏠 পারিবারিক তথ্য</div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>বাবার নাম</label><input type="text" id="f-father" placeholder="বাবার পূর্ণ নাম"></div>
+                <div class="fg"><label>বাবার পেশা</label><input type="text" id="f-father-job" placeholder="যেমন: ব্যবসায়ী"></div>
+            </div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>মায়ের নাম</label><input type="text" id="f-mother" placeholder="মায়ের পূর্ণ নাম"></div>
+                <div class="fg"><label>মায়ের পেশা</label><input type="text" id="f-mother-job" placeholder="যেমন: গৃহিণী"></div>
+            </div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>ভাইয়ের সংখ্যা</label><input type="number" id="f-brothers" placeholder="০" min="0"></div>
+                <div class="fg"><label>বোনের সংখ্যা</label><input type="number" id="f-sisters" placeholder="০" min="0"></div>
+            </div>
+            <div class="fg"><label>পরিবার সম্পর্কে বিস্তারিত</label><textarea id="f-family-about" placeholder="পরিবারের সামাজিক অবস্থান, পরিবেশ ও বৈশিষ্ট্য সম্পর্কে লিখুন..."></textarea></div>
+        </div>
+
+        <div class="nav-btns">
+            <button class="btn btn-prev" onclick="goStep(2)">← শিক্ষা ও পেশা</button>
+            <button class="btn bg" onclick="nextStep(3)">পরবর্তী: যোগাযোগ →</button>
+        </div>
+    </div>
+
+    <!-- Section 4: Contact -->
+    <div class="fsec" id="sec-4">
+        <div class="fcard">
+            <div class="fcard-title">📍 ঠিকানা</div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>জেলা <span>*</span></label>
+                    <select id="f-district">
+                        <option value="">জেলা বাছাই করুন</option>
+                        <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
+                        <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
+                        <option>রংপুর</option><option>ময়মনসিংহ</option>
+                        <option>কুমিল্লা</option><option>নারায়ণগঞ্জ</option>
+                        <option>গাজীপুর</option><option>টাঙ্গাইল</option>
+                        <option>ফরিদপুর</option><option>মাদারীপুর</option>
+                        <option>শরিয়তপুর</option><option>রাজবাড়ী</option>
+                        <option>কিশোরগঞ্জ</option><option>নেত্রকোণা</option>
+                        <option>জামালপুর</option><option>শেরপুর</option>
+                        <option>ব্রাহ্মণবাড়িয়া</option><option>চাঁদপুর</option>
+                        <option>লক্ষ্মীপুর</option><option>নোয়াখালী</option>
+                        <option>ফেনী</option><option>কক্সবাজার</option>
+                        <option>বান্দরবান</option><option>রাঙামাটি</option>
+                        <option>খাগড়াছড়ি</option>
+                        <option>হবিগঞ্জ</option><option>মৌলভীবাজার</option><option>সুনামগঞ্জ</option>
+                        <option>নীলফামারী</option><option>লালমনিরহাট</option>
+                        <option>কুড়িগ্রাম</option><option>গাইবান্ধা</option>
+                        <option>দিনাজপুর</option><option>ঠাকুরগাঁও</option><option>পঞ্চগড়</option>
+                        <option>বগুড়া</option><option>জয়পুরহাট</option>
+                        <option>নওগাঁ</option><option>নাটোর</option>
+                        <option>চাঁপাইনবাবগঞ্জ</option><option>পাবনা</option>
+                        <option>সিরাজগঞ্জ</option>
+                        <option>যশোর</option><option>ঝিনাইদহ</option>
+                        <option>নড়াইল</option><option>মাগুরা</option>
+                        <option>সাতক্ষীরা</option><option>বাগেরহাট</option>
+                        <option>কুষ্টিয়া</option><option>মেহেরপুর</option><option>চুয়াডাঙ্গা</option>
+                        <option>পিরোজপুর</option><option>ঝালকাঠি</option>
+                        <option>বরগুনা</option><option>ভোলা</option><option>পটুয়াখালী</option>
+                        <option>মুন্সিগঞ্জ</option><option>মানিকগঞ্জ</option>
+                        <option>নরসিংদী</option>
+                    </select>
+                </div>
+                <div class="fg"><label>উপজেলা / এলাকা</label><input type="text" id="f-upazila" placeholder="যেমন: সদর, মিরপুর"></div>
+            </div>
+            <div class="fg"><label>বিস্তারিত ঠিকানা</label><input type="text" id="f-address" placeholder="গ্রাম / মহল্লা / রোড নম্বর"></div>
+        </div>
+
+        <div class="fcard">
+            <div class="fcard-title">📞 যোগাযোগ</div>
+            <div class="fg2" style="margin-bottom:16px">
+                <div class="fg"><label>মোবাইল নম্বর <span>*</span></label><input type="tel" id="f-phone" placeholder="০১XXXXXXXXX"></div>
+                <div class="fg"><label>ইমেইল</label><input type="email" id="f-email" placeholder="example@mail.com" readonly></div>
+            </div>
+            <div class="fg"><label>বিকল্প যোগাযোগ (WhatsApp/Facebook)</label><input type="text" id="f-alt-contact" placeholder="যেমন: WhatsApp: 01XXXXXXXXX"></div>
+        </div>
+
+        <div class="nav-btns">
+            <button class="btn btn-prev" onclick="goStep(3)">← পরিবার</button>
+            <button class="btn bg" onclick="nextStep(4)">প্রিভিউ দেখুন →</button>
+        </div>
+    </div>
+
+    <!-- Section 5: Preview & Submit -->
+    <div class="fsec" id="sec-5">
+        <div class="fcard">
+            <div class="fcard-title">👁️ প্রিভিউ — এভাবে দেখাবে</div>
+            <div class="preview-card" id="preview-card">
+                <!-- filled by JS -->
+            </div>
+        </div>
+
+        <div class="fcard" style="border-color:var(--bdg)">
+            <div class="fcard-title">✅ সাবমিট করুন</div>
+            <p style="color:var(--mu2);font-size:14px;margin-bottom:16px;">সব তথ্য সঠিক হলে নিচের বাটনে ক্লিক করুন। আপনার বায়োডাটা হোম পেজে প্রকাশিত হবে।</p>
+            <button class="btn bg bfw" id="submit-btn" onclick="submitBiodata()">
+                🚀 বায়োডাটা প্রকাশ করুন
+            </button>
+        </div>
+
+        <div class="nav-btns">
+            <button class="btn btn-prev" onclick="goStep(4)">← যোগাযোগ</button>
+            <div></div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<footer>বায়োডাটা প্ল্যাটফর্ম &copy; ২০২৫ &nbsp;|&nbsp; <a href="biodata-platform.html" style="color:var(--mu2);text-decoration:none">হোম পেজ</a></footer>
+
+<script>
+var API='https://script.google.com/macros/s/AKfycbznanglRiChSpQVUnQDMJZ3U4WmiCuX1yuxJaO59Me5K2raJD8qCiVv0QD6ilBmThUgvA/exec';
+var photoBase64='';
+var currentStep=1;
+
+// ── Toast ──
+function toast(msg,type='info'){
+    const c=document.getElementById('toast-wrap'),d=document.createElement('div');
+    d.className='toast '+type;
+    const ic={success:'✅',error:'❌',info:'ℹ️'};
+    d.innerHTML=`<span>${ic[type]}</span><span style="flex:1">${msg}</span><button class="tx" onclick="this.parentElement.remove()">×</button>`;
+    c.appendChild(d);setTimeout(()=>{d.style.animation='tOut .3s ease forwards';setTimeout(()=>d.remove(),300);},5000);
+}
+
+// ── Loading ──
+function setLoad(id,on){
+    const b=document.getElementById(id);if(!b)return;
+    if(on){b._o=b.innerHTML;b.innerHTML='<span class="sp"></span> সাবমিট হচ্ছে, অপেক্ষা করুন...';b.classList.add('bl');}
+    else{b.innerHTML=b._o||b.innerHTML;b.classList.remove('bl');}
+}
+
+// ── Auth Check ──
+window.onload=function(){
+    const role=localStorage.getItem('userRole');
+    const name=localStorage.getItem('userName');
+    const email=localStorage.getItem('userEmail');
+    if(!role){
+        document.getElementById('auth-guard').style.display='block';
+    }else{
+        document.getElementById('form-area').style.display='block';
+        document.getElementById('uname').textContent=name||'ব্যবহারকারী';
+        if(email) document.getElementById('f-email').value=email;
+        // Pre-fill name if available
+        if(name) document.getElementById('f-name').value=name;
+    }
+};
+
+function doLogout(){
+    ['userRole','userName','userEmail'].forEach(k=>localStorage.removeItem(k));
+    window.location.href='biodata-platform.html';
+}
+
+// ── Photo Handling ──
+function handlePhoto(input){
+    const file=input.files[0];
+    if(!file)return;
+    if(file.size>5*1024*1024){toast('ছবির আকার সর্বোচ্চ ৫ MB হতে পারবে।','error');return;}
+    const reader=new FileReader();
+    reader.onload=e=>{
+        photoBase64=e.target.result;
+        const box=document.getElementById('photo-preview-box');
+        box.innerHTML=`<img src="${photoBase64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        toast('ছবি যোগ হয়েছে।','success');
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearPhoto(){
+    photoBase64='';
+    document.getElementById('photo-input').value='';
+    document.getElementById('photo-preview-box').innerHTML=`<div class="photo-placeholder"><span>📷</span><small>ছবি যোগ করুন</small></div>`;
+}
+
+// ── Step Navigation ──
+function goStep(n){
+    // hide all
+    for(let i=1;i<=5;i++){
+        document.getElementById('sec-'+i).classList.remove('active');
+        const sp=document.getElementById('step-'+i);
+        sp.classList.remove('active');
+        if(i<n) sp.classList.add('done'); else sp.classList.remove('done');
+    }
+    document.getElementById('sec-'+n).classList.add('active');
+    document.getElementById('step-'+n).classList.add('active');
+    currentStep=n;
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(n===5) buildPreview();
+}
+
+function nextStep(from){
+    if(from===1 && !validateStep1()) return;
+    if(from===2 && !validateStep2()) return;
+    if(from===4 && !validateStep4()) return;
+    goStep(from+1);
+}
+
+function validateStep1(){
+    const name=document.getElementById('f-name').value.trim();
+    const age=document.getElementById('f-age').value;
+    const gender=document.getElementById('f-gender').value;
+    const religion=document.getElementById('f-religion').value;
+    if(!name){toast('নাম দিন।','error');return false;}
+    if(!age){toast('বয়স দিন।','error');return false;}
+    if(!gender){toast('লিঙ্গ বাছাই করুন।','error');return false;}
+    if(!religion){toast('ধর্ম বাছাই করুন।','error');return false;}
+    return true;
+}
+function validateStep2(){
+    if(!document.getElementById('f-edu').value){toast('শিক্ষাগত যোগ্যতা বাছাই করুন।','error');return false;}
+    if(!document.getElementById('f-prof').value){toast('পেশা বাছাই করুন।','error');return false;}
+    return true;
+}
+function validateStep4(){
+    if(!document.getElementById('f-district').value){toast('জেলা বাছাই করুন।','error');return false;}
+    if(!document.getElementById('f-phone').value.trim()){toast('মোবাইল নম্বর দিন।','error');return false;}
+    return true;
+}
+
+// ── Preview ──
+function buildPreview(){
+    const name=v('f-name')||'নাম প্রকাশে অনিচ্ছুক';
+    const age=v('f-age');const prof=v('f-prof');const dist=v('f-district');
+    const edu=v('f-edu');const religion=v('f-religion');
+    const phone=v('f-phone');const email=v('f-email');
+    const blood=v('f-blood');const marital=v('f-marital');
+    const init=name.charAt(0);
+    const avHTML=photoBase64
+        ?`<img class="prev-av" src="${photoBase64}" style="display:block">`
+        :`<div class="prev-av">${init}</div>`;
+    document.getElementById('preview-card').innerHTML=`
+        <div class="prev-top">${avHTML}<div><div class="prev-name">${name}</div><div class="prev-sub">${prof||'পেশা উল্লেখ নেই'} &nbsp;|&nbsp; ${dist||'জেলা উল্লেখ নেই'}</div></div></div>
+        <div class="prev-grid">
+            <div class="prev-item"><label>বয়স</label><span>${age||'—'}</span></div>
+            <div class="prev-item"><label>ধর্ম</label><span>${religion||'—'}</span></div>
+            <div class="prev-item"><label>শিক্ষা</label><span>${edu||'—'}</span></div>
+            <div class="prev-item"><label>বৈবাহিক</label><span>${marital||'—'}</span></div>
+            <div class="prev-item"><label>রক্তের গ্রুপ</label><span>${blood||'—'}</span></div>
+            <div class="prev-item"><label>ফোন</label><span>${phone||'—'}</span></div>
+        </div>
+    `;
+}
+
+function v(id){return(document.getElementById(id)||{}).value||'';}
+
+// ── Submit ──
+async function submitBiodata(){
+    if(!validateStep1()||!validateStep2()||!validateStep4()) return;
+
+    setLoad('submit-btn',true);
+    const payload={
+        action:'saveBiodata',
+        email:v('f-email'),
+        Name:v('f-name'),
+        Age:v('f-age'),
+        Gender:v('f-gender'),
+        Religion:v('f-religion'),
+        Marital:v('f-marital'),
+        Blood:v('f-blood'),
+        Education:v('f-edu'),
+        Institution:v('f-inst'),
+        Profession:v('f-prof'),
+        Income:v('f-income'),
+        Workplace:v('f-workplace'),
+        About:v('f-about'),
+        Father:v('f-father'),
+        Father_Job:v('f-father-job'),
+        Mother:v('f-mother'),
+        Mother_Job:v('f-mother-job'),
+        Brothers:v('f-brothers'),
+        Sisters:v('f-sisters'),
+        Family_About:v('f-family-about'),
+        District:v('f-district'),
+        Upazila:v('f-upazila'),
+        Address:v('f-address'),
+        Phone:v('f-phone'),
+        Alt_Contact:v('f-alt-contact'),
+        Photo:photoBase64
+    };
+
+    try{
+        // Use JSON POST for large data (photo base64)
+        const response=await fetch(API,{
+            method:'POST',
+            mode:'cors',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(payload)
+        });
+        const res=await response.json();
+        setLoad('submit-btn',false);
+        if(res.status==='success'){
+            toast('🎉 বায়োডাটা সফলভাবে প্রকাশিত হয়েছে!','success');
+            setTimeout(()=>window.location.href='biodata-platform.html',2000);
+        }else{
+            toast(res.message||'সাবমিট ব্যর্থ হয়েছে।','error');
+        }
+    }catch(e){
+        setLoad('submit-btn',false);
+        toast('সার্ভার সংযোগে সমস্যা হয়েছে।','error');
+        console.error(e);
+    }
+}
+</script>
+</body>
+</html>
