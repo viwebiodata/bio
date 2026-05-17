@@ -1,134 +1,151 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বায়োডাটা প্ল্যাটফর্ম</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root{--gold:#F5B800;--glow:rgba(245,184,0,.13);--bg:#0A0D12;--s1:#12171F;--s2:#1A2030;--bd:rgba(255,255,255,.07);--bdg:rgba(245,184,0,.28);--tx:#EEF0F4;--mu:#6B7585;--mu2:#9AA3B0;--r:12px;--rs:8px;}
-        *{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;line-height:1.65;}
-        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--s2);border-radius:99px;}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>বায়োডাটা প্ল্যাটফর্ম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#F5B800;--glow:rgba(245,184,0,.12);--bg:#0A0D12;--s1:#12171F;--s2:#1A2030;--bd:rgba(255,255,255,.07);--bdg:rgba(245,184,0,.28);--tx:#EEF0F4;--mu:#6B7585;--mu2:#9AA3B0;--r:12px;--rs:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;line-height:1.65;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--s2);border-radius:99px;}
 
-        #toast-wrap{position:fixed;top:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
-        .toast{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--bd);padding:13px 16px;border-radius:var(--rs);font-size:14px;min-width:270px;max-width:340px;pointer-events:all;animation:tIn .3s ease;box-shadow:0 8px 28px rgba(0,0,0,.45);}
-        .toast.success{border-color:rgba(52,212,153,.35);}.toast.error{border-color:rgba(255,92,92,.35);}
-        .tx{margin-left:auto;background:none;border:none;color:var(--mu);cursor:pointer;font-size:17px;line-height:1;}
-        @keyframes tIn{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:translateX(0)}}
-        @keyframes tOut{to{opacity:0;transform:translateX(36px)}}
+#tw{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:9px;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--bd);padding:12px 15px;border-radius:var(--rs);font-size:14px;min-width:260px;max-width:340px;pointer-events:all;animation:tI .3s ease;box-shadow:0 8px 28px rgba(0,0,0,.45);}
+.toast.success{border-color:rgba(52,212,153,.35);}.toast.error{border-color:rgba(255,92,92,.35);}
+.tx{margin-left:auto;background:none;border:none;color:var(--mu);cursor:pointer;font-size:16px;}
+@keyframes tI{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tO{to{opacity:0;transform:translateX(32px)}}
 
-        nav{background:rgba(10,13,18,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:13px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100;}
-        .logo{font-family:'Noto Serif Bengali',serif;font-size:21px;font-weight:600;color:var(--gold);text-decoration:none;}
-        .logo sub{font-size:13px;font-family:'Hind Siliguri',sans-serif;margin-left:5px;color:var(--mu2);opacity:.6;vertical-align:middle;}
-        .nav-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+nav{background:rgba(10,13,18,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:13px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Noto Serif Bengali',serif;font-size:21px;font-weight:600;color:var(--g);text-decoration:none;}
+.logo sub{font-size:13px;font-family:'Hind Siliguri',sans-serif;margin-left:5px;color:var(--mu2);opacity:.6;vertical-align:middle;}
+.nr{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 
-        .btn{padding:8px 17px;border-radius:var(--rs);border:none;cursor:pointer;font-weight:600;font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;}
-        .bg{background:var(--gold);color:#0A0D12;}.bg:hover{background:#FFC41A;transform:translateY(-1px);box-shadow:0 4px 18px rgba(245,184,0,.3);}
-        .bh{background:transparent;color:var(--tx);border:1px solid var(--bd);}.bh:hover{border-color:var(--bdg);color:var(--gold);background:var(--glow);}
-        .bd2{background:transparent;color:#FF5C5C;border:1px solid rgba(255,92,92,.25);}.bd2:hover{background:rgba(255,92,92,.08);border-color:rgba(255,92,92,.5);}
-        .bsm{padding:6px 13px;font-size:13px;}.bfw{width:100%;justify-content:center;padding:13px;}
-        .bl{opacity:.65;pointer-events:none;}
-        .sp{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#0A0D12;border-radius:50%;animation:sp .7s linear infinite;}
-        @keyframes sp{to{transform:rotate(360deg)}}
+.btn{padding:8px 17px;border-radius:var(--rs);border:none;cursor:pointer;font-weight:600;font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;}
+.bg{background:var(--g);color:#0A0D12;}.bg:hover{background:#ffc418;transform:translateY(-1px);box-shadow:0 4px 18px rgba(245,184,0,.3);}
+.bh{background:transparent;color:var(--tx);border:1px solid var(--bd);}.bh:hover{border-color:var(--bdg);color:var(--g);background:var(--glow);}
+.br{background:transparent;color:#FF5C5C;border:1px solid rgba(255,92,92,.25);}.br:hover{background:rgba(255,92,92,.08);}
+.bsm{font-size:13px;padding:6px 13px;}.bfw{width:100%;justify-content:center;padding:13px;}
+.bl{opacity:.65;pointer-events:none;}
+.sp{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#0A0D12;border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-        .uchip{display:none;align-items:center;gap:8px;padding:5px 12px;background:var(--glow);border:1px solid var(--bdg);border-radius:99px;font-size:13px;color:var(--tx);}
-        .uchip .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.uchip{display:none;align-items:center;gap:7px;padding:5px 12px;background:var(--glow);border:1px solid var(--bdg);border-radius:99px;font-size:13px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--g);}
 
-        .hero{text-align:center;padding:76px 20px 64px;position:relative;overflow:hidden;}
-        .hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:560px;height:380px;background:radial-gradient(ellipse,rgba(245,184,0,.07) 0%,transparent 70%);pointer-events:none;}
-        .hbadge{display:inline-flex;align-items:center;gap:7px;background:var(--glow);border:1px solid var(--bdg);color:var(--gold);padding:5px 13px;border-radius:99px;font-size:13px;margin-bottom:20px;font-weight:500;}
-        .pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-        .hero h1{font-family:'Noto Serif Bengali',serif;font-size:40px;font-weight:600;line-height:1.3;margin-bottom:14px;}
-        .hero h1 em{font-style:normal;color:var(--gold);}
-        .hero p{color:var(--mu2);max-width:520px;margin:0 auto 28px;font-size:16px;}
-        .hcta{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;}
+/* Hero */
+.hero{text-align:center;padding:72px 20px 58px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:540px;height:360px;background:radial-gradient(ellipse,rgba(245,184,0,.07),transparent 70%);pointer-events:none;}
+.hb{display:inline-flex;align-items:center;gap:7px;background:var(--glow);border:1px solid var(--bdg);color:var(--g);padding:5px 13px;border-radius:99px;font-size:13px;margin-bottom:18px;font-weight:500;}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-family:'Noto Serif Bengali',serif;font-size:38px;font-weight:600;line-height:1.3;margin-bottom:13px;}
+.hero h1 em{font-style:normal;color:var(--g);}
+.hero p{color:var(--mu2);max-width:520px;margin:0 auto 26px;font-size:16px;}
+.hcta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-        .stats{display:flex;justify-content:center;background:var(--s1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
-        .stat{padding:15px 32px;text-align:center;border-right:1px solid var(--bd);}
-        .stat:last-child{border-right:none;}
-        .sn{font-size:21px;font-weight:700;color:var(--gold);}
-        .sl{font-size:12px;color:var(--mu);margin-top:2px;}
+.stats{display:flex;justify-content:center;background:var(--s1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.stat{padding:14px 30px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.sn{font-size:20px;font-weight:700;color:var(--g);}
+.sl{font-size:12px;color:var(--mu);margin-top:2px;}
 
-        .wrap{max-width:1200px;margin:0 auto;padding:34px 20px;}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 20px;}
 
-        .cbanner{display:none;background:linear-gradient(135deg,rgba(245,184,0,.1),rgba(245,184,0,.04));border:1px solid var(--bdg);border-radius:var(--r);padding:22px 24px;margin-bottom:28px;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-        .cbt h3{font-size:17px;font-weight:600;margin-bottom:4px;}
-        .cbt p{font-size:14px;color:var(--mu2);}
+/* Create banner */
+.cbanner{display:none;background:linear-gradient(135deg,rgba(245,184,0,.1),rgba(245,184,0,.04));border:1px solid var(--bdg);border-radius:var(--r);padding:20px 22px;margin-bottom:26px;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.cbt h3{font-size:16px;font-weight:600;margin-bottom:3px;}
+.cbt p{font-size:13px;color:var(--mu2);}
 
-        .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
-        .sh h2{font-size:19px;font-weight:600;}.sh h2 span{color:var(--gold);}
-        .cpill{background:var(--s2);border:1px solid var(--bd);padding:4px 11px;border-radius:99px;font-size:13px;color:var(--mu2);}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.sh h2{font-size:19px;font-weight:600;}.sh h2 span{color:var(--g);}
+.cpill{background:var(--s2);border:1px solid var(--bd);padding:4px 11px;border-radius:99px;font-size:13px;color:var(--mu2);}
 
-        .sbox{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:28px;display:flex;flex-direction:column;gap:14px;}
-        .inw{position:relative;}
-        .iico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;}
-        .si{width:100%;padding:12px 13px 12px 42px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-size:15px;font-family:'Hind Siliguri',sans-serif;transition:border-color .2s;}
-        .si:focus{outline:none;border-color:var(--bdg);}
-        .si::placeholder{color:var(--mu);}
-        .trow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
-        .flbl{font-size:13px;color:var(--mu);margin-right:4px;}
-        .tab{padding:6px 15px;background:var(--bg);border:1px solid var(--bd);color:var(--mu2);border-radius:99px;cursor:pointer;font-size:13px;font-family:'Hind Siliguri',sans-serif;transition:all .2s;font-weight:500;}
-        .tab:hover{border-color:var(--bdg);color:var(--gold);}
-        .tab.active{background:var(--gold);color:#0A0D12;border-color:var(--gold);font-weight:600;}
+.sbox{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;margin-bottom:26px;display:flex;flex-direction:column;gap:13px;}
+.inw{position:relative;}
+.iico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;}
+.si{width:100%;padding:12px 12px 12px 42px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-size:15px;font-family:'Hind Siliguri',sans-serif;transition:border-color .2s;}
+.si:focus{outline:none;border-color:var(--bdg);}
+.si::placeholder{color:var(--mu);}
+.trow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.flbl{font-size:13px;color:var(--mu);margin-right:3px;}
+.tab{padding:6px 14px;background:var(--bg);border:1px solid var(--bd);color:var(--mu2);border-radius:99px;cursor:pointer;font-size:13px;font-family:'Hind Siliguri',sans-serif;transition:all .2s;font-weight:500;}
+.tab:hover{border-color:var(--bdg);color:var(--g);}
+.tab.active{background:var(--g);color:#0A0D12;border-color:var(--g);font-weight:600;}
 
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;}
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
 
-        .card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden;}
-        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .25s;}
-        .card:hover{transform:translateY(-4px);border-color:var(--bdg);box-shadow:0 12px 32px rgba(0,0,0,.35);}
-        .card:hover::before{opacity:1;}
-        .ctop{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-        .av{width:54px;height:54px;border-radius:50%;background:var(--glow);border:2px solid var(--bdg);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--gold);font-family:'Noto Serif Bengali',serif;flex-shrink:0;}
-        .avimg{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid var(--bdg);flex-shrink:0;}
-        .cname{font-size:16px;font-weight:600;}
-        .crole{font-size:13px;color:var(--mu2);}
-        .cmeta{display:flex;flex-direction:column;gap:5px;margin-bottom:15px;}
-        .mrow{font-size:13px;color:var(--mu2);display:flex;align-items:center;gap:6px;}
-        .ctags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-        .tag{padding:3px 9px;background:var(--s2);border:1px solid var(--bd);border-radius:99px;font-size:12px;color:var(--mu2);}
-        .bcrd{width:100%;justify-content:center;padding:8px;font-size:13px;background:transparent;color:var(--mu2);border:1px solid var(--bd);}
-        .bcrd:hover{border-color:var(--gold);color:var(--gold);}
+/* ── Rich Card ── */
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent);opacity:0;transition:opacity .25s;}
+.card:hover{transform:translateY(-4px);border-color:var(--bdg);box-shadow:0 12px 32px rgba(0,0,0,.35);}
+.card:hover::before{opacity:1;}
 
-        .empty{text-align:center;padding:55px 20px;grid-column:1/-1;color:var(--mu);}
-        .eico{font-size:44px;margin-bottom:12px;opacity:.35;}
-        .skel{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;}
-        .skl{height:11px;background:var(--s2);border-radius:6px;margin-bottom:10px;animation:shim 1.5s infinite;}
-        @keyframes shim{0%,100%{opacity:.4}50%{opacity:.85}}
+/* Card top banner */
+.card-banner{background:linear-gradient(135deg,var(--s2),var(--bg));padding:18px 18px 0;display:flex;align-items:flex-start;gap:14px;}
+.av{width:62px;height:62px;border-radius:50%;background:var(--glow);border:2px solid var(--bdg);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--g);font-family:'Noto Serif Bengali',serif;flex-shrink:0;overflow:hidden;}
+.av img{width:100%;height:100%;object-fit:cover;}
+.card-head{flex:1;min-width:0;}
+.card-name{font-size:17px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-tagline{font-size:13px;color:var(--mu2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);justify-content:center;align-items:center;z-index:1000;padding:20px;}
-        .modal.open{display:flex;animation:fBg .25s ease;}
-        @keyframes fBg{from{opacity:0}to{opacity:1}}
-        .mc{background:var(--s1);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:420px;position:relative;animation:sUp .28s ease;box-shadow:0 24px 70px rgba(0,0,0,.6);}
-        @keyframes sUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-        .mh{padding:26px 26px 0;display:flex;align-items:flex-start;justify-content:space-between;}
-        .mt{font-family:'Noto Serif Bengali',serif;font-size:21px;font-weight:600;color:var(--gold);}
-        .ms{font-size:13px;color:var(--mu);margin-top:3px;}
-        .xb{background:var(--s2);color:var(--mu);border:1px solid var(--bd);border-radius:var(--rs);width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
-        .xb:hover{color:var(--tx);}
-        .mb{padding:22px 26px 26px;}
-        .fg{margin-bottom:14px;}
-        .fg label{display:block;margin-bottom:5px;font-size:13px;font-weight:500;color:var(--mu2);}
-        .fg input{width:100%;padding:10px 13px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:border-color .2s;}
-        .fg input:focus{outline:none;border-color:var(--bdg);box-shadow:0 0 0 3px rgba(245,184,0,.07);}
-        .fg input::placeholder{color:var(--mu);}
+/* Card body */
+.card-body{padding:14px 18px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.info-item{display:flex;flex-direction:column;}
+.info-lbl{font-size:11px;color:var(--mu);margin-bottom:2px;}
+.info-val{font-size:13px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-about{font-size:13px;color:var(--mu2);line-height:1.55;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.tag{padding:3px 9px;background:var(--s2);border:1px solid var(--bd);border-radius:99px;font-size:12px;color:var(--mu2);}
+.card-footer{border-top:1px solid var(--bd);padding:11px 18px;display:flex;gap:8px;}
+.btn-card{flex:1;justify-content:center;padding:8px;font-size:13px;background:transparent;color:var(--mu2);border:1px solid var(--bd);}
+.btn-card:hover{border-color:var(--g);color:var(--g);}
+.btn-card-gold{flex:1;justify-content:center;padding:8px;font-size:13px;}
 
-        footer{text-align:center;padding:26px 20px;color:var(--mu);border-top:1px solid var(--bd);font-size:13px;margin-top:54px;}
-        @media(max-width:600px){.hero h1{font-size:26px;}.stat{padding:13px 18px;}nav{padding:11px 4%;}.logo sub{display:none;}}
-    </style>
+/* Empty/Skeleton */
+.empty{text-align:center;padding:55px 20px;grid-column:1/-1;color:var(--mu);}
+.eico{font-size:44px;margin-bottom:12px;opacity:.35;}
+.skel{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;}
+.skl{height:11px;background:var(--s2);border-radius:6px;margin-bottom:10px;animation:shim 1.5s infinite;}
+@keyframes shim{0%,100%{opacity:.4}50%{opacity:.85}}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);justify-content:center;align-items:center;z-index:1000;padding:20px;}
+.modal.open{display:flex;animation:fBg .25s ease;}
+@keyframes fBg{from{opacity:0}to{opacity:1}}
+.mc{background:var(--s1);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:420px;animation:sUp .28s ease;box-shadow:0 24px 70px rgba(0,0,0,.6);}
+@keyframes sUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.mh{padding:24px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;}
+.mt{font-family:'Noto Serif Bengali',serif;font-size:21px;font-weight:600;color:var(--g);}
+.ms{font-size:13px;color:var(--mu);margin-top:3px;}
+.xb{background:var(--s2);color:var(--mu);border:1px solid var(--bd);border-radius:var(--rs);width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.xb:hover{color:var(--tx);}
+.mb{padding:20px 24px 24px;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;margin-bottom:5px;font-size:13px;font-weight:500;color:var(--mu2);}
+.fg input{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:border-color .2s;}
+.fg input:focus{outline:none;border-color:var(--bdg);box-shadow:0 0 0 3px rgba(245,184,0,.06);}
+.fg input::placeholder{color:var(--mu);}
+
+footer{text-align:center;padding:24px;color:var(--mu);border-top:1px solid var(--bd);font-size:13px;margin-top:52px;}
+@media(max-width:600px){.hero h1{font-size:26px;}.stat{padding:12px 16px;}nav{padding:11px 4%;}.logo sub{display:none;}}
+</style>
 </head>
 <body>
-<div id="toast-wrap"></div>
+<div id="tw"></div>
 
 <nav>
     <a href="biodata-platform.html" class="logo">বায়োডাটা<sub>প্ল্যাটফর্ম</sub></a>
-    <div class="nav-r" id="nav-r"></div>
+    <div class="nr" id="nr"></div>
 </nav>
 
 <section class="hero">
-    <div class="hbadge"><div class="pulse"></div> সম্পূর্ণ বিনামূল্যে</div>
+    <div class="hb"><div class="pulse"></div> সম্পূর্ণ বিনামূল্যে</div>
     <h1>আপনার পরিচয়<br><em>সবার কাছে পৌঁছে দিন</em></h1>
     <p>সাইন আপ করুন, নিজের বায়োডাটা তৈরি করুন। শিক্ষা, পেশা ও পারিবারিক তথ্য সুন্দরভাবে সাজান।</p>
     <div class="hcta" id="hcta"></div>
@@ -141,10 +158,11 @@
 </div>
 
 <div class="wrap">
+    <!-- Create banner (logged-in users) -->
     <div class="cbanner" id="cbanner">
         <div class="cbt">
-            <h3>📝 আপনার বায়োডাটা তৈরি করুন</h3>
-            <p>এখনো বায়োডাটা তৈরি করেননি — এখনই শুরু করুন, সবাই দেখতে পাবে।</p>
+            <h3>📝 আপনার বায়োডাটা তৈরি / আপডেট করুন</h3>
+            <p>এখনই শুরু করুন — সবাই দেখতে পাবে।</p>
         </div>
         <a href="biodata-form.html" class="btn bg">✨ বায়োডাটা বানান</a>
     </div>
@@ -157,7 +175,7 @@
     <div class="sbox">
         <div class="inw">
             <span class="iico">🔍</span>
-            <input type="text" class="si" id="si" placeholder="নাম, পেশা বা এলাকা দিয়ে খুঁজুন..." oninput="filterBiodatas()">
+            <input type="text" class="si" id="si" placeholder="নাম, পেশা, প্রতিষ্ঠান বা এলাকা দিয়ে খুঁজুন..." oninput="filterBiodatas()">
         </div>
         <div class="trow">
             <span class="flbl">ফিল্টার:</span>
@@ -169,9 +187,9 @@
     </div>
 
     <div class="grid" id="grid">
-        <div class="skel"><div class="skl" style="width:45%"></div><div class="skl" style="width:70%"></div><div class="skl" style="width:55%"></div></div>
-        <div class="skel"><div class="skl" style="width:60%"></div><div class="skl" style="width:80%"></div><div class="skl" style="width:50%"></div></div>
-        <div class="skel"><div class="skl" style="width:40%"></div><div class="skl" style="width:65%"></div><div class="skl" style="width:60%"></div></div>
+        <div class="skel"><div class="skl" style="width:40%"></div><div class="skl" style="width:70%"></div><div class="skl" style="width:55%"></div></div>
+        <div class="skel"><div class="skl" style="width:55%"></div><div class="skl" style="width:80%"></div><div class="skl" style="width:50%"></div></div>
+        <div class="skel"><div class="skl" style="width:45%"></div><div class="skl" style="width:65%"></div><div class="skl" style="width:60%"></div></div>
     </div>
 </div>
 
@@ -214,41 +232,36 @@
 <footer>বায়োডাটা প্ল্যাটফর্ম &copy; ২০২৫ &nbsp;|&nbsp; সবার জন্য সম্পূর্ণ বিনামূল্যে ❤️</footer>
 
 <script>
-var API='https://script.google.com/macros/s/AKfycbznanglRiChSpQVUnQDMJZ3U4WmiCuX1yuxJaO59Me5K2raJD8qCiVv0QD6ilBmThUgvA/exec';
-var allBiodatas=[],curFilter='all';
+var API = 'https://script.google.com/macros/s/AKfycby2qAvtig8X_sINQQIOTluCmbzvPV4RkisAForEpp31MVkumXCGmPDADnKVK-tcDr80DA/exec';
+var allBiodatas=[], curF='all';
 
+// ── Toast ──
 function toast(msg,type='info'){
-    const c=document.getElementById('toast-wrap'),d=document.createElement('div');
+    const c=document.getElementById('tw'),d=document.createElement('div');
     d.className='toast '+type;
     const ic={success:'✅',error:'❌',info:'ℹ️'};
     d.innerHTML=`<span>${ic[type]}</span><span style="flex:1">${msg}</span><button class="tx" onclick="this.parentElement.remove()">×</button>`;
-    c.appendChild(d);setTimeout(()=>{d.style.animation='tOut .3s ease forwards';setTimeout(()=>d.remove(),300);},4500);
+    c.appendChild(d);setTimeout(()=>{d.style.animation='tO .3s ease forwards';setTimeout(()=>d.remove(),300);},4500);
 }
-
-function setLoad(id,on){
-    const b=document.getElementById(id);if(!b)return;
-    if(on){b._o=b.innerHTML;b.innerHTML='<span class="sp"></span> অপেক্ষা...';b.classList.add('bl');}
-    else{b.innerHTML=b._o||b.innerHTML;b.classList.remove('bl');}
-}
+function setLoad(id,on){const b=document.getElementById(id);if(!b)return;if(on){b._o=b.innerHTML;b.innerHTML='<span class="sp"></span> অপেক্ষা...';b.classList.add('bl');}else{b.innerHTML=b._o;b.classList.remove('bl');}}
 
 async function POST(data){
     try{
-        const body=new URLSearchParams();
-        for(const k in data)body.append(k,data[k]);
+        const body=new URLSearchParams();for(const k in data)body.append(k,data[k]);
         const r=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
-        if(!r.ok)throw new Error('HTTP '+r.status);
-        return await r.json();
+        if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();
     }catch(e){toast('সার্ভার সংযোগ ব্যর্থ।','error');return null;}
 }
 
+// ── Session ──
 function getSess(){return{role:localStorage.getItem('userRole'),name:localStorage.getItem('userName'),email:localStorage.getItem('userEmail')};}
 
 function renderNav(){
     const{role,name}=getSess();
-    const nr=document.getElementById('nav-r'),hc=document.getElementById('hcta'),cb=document.getElementById('cbanner');
+    const nr=document.getElementById('nr'),hc=document.getElementById('hcta'),cb=document.getElementById('cbanner');
     if(role){
-        nr.innerHTML=`<div class="uchip" style="display:flex"><div class="dot"></div><span>${name||'ব্যবহারকারী'}</span></div><a href="biodata-form.html" class="btn bg bsm">📝 আমার বায়োডাটা</a><button class="btn bd2 bsm" onclick="doLogout()">লগআউট</button>`;
-        hc.innerHTML=`<a href="biodata-form.html" class="btn bg">📝 বায়োডাটা বানান</a><button class="btn bh" onclick="document.querySelector('.wrap').scrollIntoView({behavior:'smooth'})">বায়োডাটা দেখুন ↓</button>`;
+        nr.innerHTML=`<div class="uchip" style="display:flex"><div class="dot"></div><span>${name||'ব্যবহারকারী'}</span></div><a href="biodata-form.html" class="btn bg bsm">📝 আমার বায়োডাটা</a><button class="btn br bsm" onclick="doLogout()">লগআউট</button>`;
+        hc.innerHTML=`<a href="biodata-form.html" class="btn bg">📝 বায়োডাটা বানান/আপডেট</a><button class="btn bh" onclick="document.querySelector('.wrap').scrollIntoView({behavior:'smooth'})">বায়োডাটা দেখুন ↓</button>`;
         cb.style.display='flex';
     }else{
         nr.innerHTML=`<button class="btn bh bsm" onclick="openModal('login-modal')">লগইন</button><button class="btn bg bsm" onclick="openModal('signup-modal')">✨ সাইন আপ</button><button class="btn bh bsm" style="font-size:12px;color:var(--mu2)" onclick="openModal('admin-modal')">🛡️</button>`;
@@ -256,19 +269,15 @@ function renderNav(){
     }
 }
 
-function doLogout(){
-    ['userRole','userName','userEmail'].forEach(k=>localStorage.removeItem(k));
-    toast('লগআউট সফল হয়েছে।','success');
-    setTimeout(()=>location.reload(),800);
-}
+function doLogout(){['userRole','userName','userEmail'].forEach(k=>localStorage.removeItem(k));toast('লগআউট সফল।','success');setTimeout(()=>location.reload(),800);}
 
+// ── Auth ──
 async function doLogin(){
     const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;
     if(!e||!p){toast('ইমেইল ও পাসওয়ার্ড দিন।','error');return;}
     setLoad('lb',true);
     const res=await POST({action:'login',email:e,password:p});
-    setLoad('lb',false);
-    if(!res)return;
+    setLoad('lb',false);if(!res)return;
     if(res.status==='success'){
         localStorage.setItem('userRole',res.user.role||'user');
         localStorage.setItem('userName',res.user.name||'');
@@ -276,32 +285,29 @@ async function doLogin(){
         toast(res.message,'success');closeModal('login-modal');renderNav();
     }else toast(res.message,'error');
 }
-
 async function doSignup(){
     const n=document.getElementById('sn').value.trim(),e=document.getElementById('se').value.trim(),p=document.getElementById('sp').value;
     if(!e||!p){toast('ইমেইল ও পাসওয়ার্ড দিন।','error');return;}
     if(p.length<6){toast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর।','error');return;}
     setLoad('sb',true);
     const res=await POST({action:'signup',name:n||'User',email:e,password:p});
-    setLoad('sb',false);
-    if(!res)return;
+    setLoad('sb',false);if(!res)return;
     if(res.status==='success'){toast(res.message+' এখন লগইন করুন।','success');closeModal('signup-modal');}
     else toast(res.message,'error');
 }
-
 async function doAdminLogin(){
     const p=document.getElementById('ap').value;
     if(!p){toast('পাসওয়ার্ড দিন।','error');return;}
     setLoad('ab',true);
     const res=await POST({action:'adminLogin',password:p});
-    setLoad('ab',false);
-    if(!res)return;
+    setLoad('ab',false);if(!res)return;
     if(res.status==='success'){
         localStorage.setItem('userRole','admin');localStorage.setItem('userName','অ্যাডমিন');localStorage.setItem('userEmail','admin');
         toast(res.message,'success');closeModal('admin-modal');renderNav();
     }else toast(res.message,'error');
 }
 
+// ── Load Biodatas ──
 async function loadBiodatas(){
     try{
         const r=await fetch(API),result=await r.json();
@@ -310,57 +316,105 @@ async function loadBiodatas(){
             document.getElementById('stat-t').textContent=allBiodatas.length||'০';
             renderCards(allBiodatas);
         }else renderEmpty('ডেটা পাওয়া যায়নি।');
-    }catch(e){renderEmpty('সার্ভার সংযোগে সমস্যা।');}
+    }catch(e){renderEmpty('সার্ভার সংযোগে সমস্যা হয়েছে।');}
 }
 
+// ── Render Rich Cards ──
 function renderCards(data){
     const g=document.getElementById('grid');
     document.getElementById('rcnt').textContent=data.length+'টি পাওয়া গেছে';
     if(!data.length){renderEmpty('কোনো বায়োডাটা পাওয়া যায়নি।');return;}
     g.innerHTML='';
     data.forEach(item=>{
-        const name=item.Name||item.name||'নাম প্রকাশে অনিচ্ছুক';
-        const prof=item.Profession||item.profession||'';
-        const dist=item.District||item.district||'';
-        const edu=item.Education||item.education||'';
-        const age=item.Age||item.age||'';
-        const photo=item.Photo_URL||'';
-        const init=name.charAt(0);
-        const c=document.createElement('div');c.className='card';
+        const name    = item.Name        || 'নাম প্রকাশে অনিচ্ছুক';
+        const phone   = item.Phone       || '—';
+        const dist    = item.District    || '';
+        const upa     = item.Upazila     || '';
+        const addr    = [upa,dist].filter(Boolean).join(', ')||'—';
+        const about   = item.About       || '';
+        const photo   = item.Photo_URL   || '';
+        const lastEdu = item.Last_Education  || '';
+        const lastInst= item.Last_Institution|| '';
+        const wTitle  = item.Last_Work_Title || '';
+        const wOrg    = item.Last_Work_Org   || '';
+        const byear   = item.Birth_Year || '';
+        const religion= item.Religion   || '';
+
+        const tagline = wTitle
+            ? (wTitle + (wOrg ? ', '+wOrg : ''))
+            : (lastEdu || 'পেশা উল্লেখ নেই');
+
+        const init = name.charAt(0);
+
+        // Work/edu tabs
+        const workArr = Array.isArray(item.Work) ? item.Work : [];
+        const eduArr  = Array.isArray(item.Education) ? item.Education : [];
+
+        // Filter keyword for tab
+        item._searchStr = [name,lastEdu,lastInst,wTitle,wOrg,dist,upa,about].join(' ').toLowerCase();
+
+        const c=document.createElement('div'); c.className='card';
         c.innerHTML=`
-        <div class="ctop">
-            ${photo?`<img class="avimg" src="${photo}" alt="${name}" onerror="this.outerHTML='<div class=\\'av\\'>${init}</div>'">`:`<div class="av">${init}</div>`}
-            <div><div class="cname">${name}</div><div class="crole">${prof||'পেশা উল্লেখ নেই'}</div></div>
+        <div class="card-banner">
+            <div class="av">
+                ${photo?`<img src="${photo}" alt="${name}" onerror="this.style.display='none';this.parentElement.style.fontSize='22px';this.parentElement.textContent='${init}'">`:''}
+                ${!photo?init:''}
+            </div>
+            <div class="card-head">
+                <div class="card-name">${name}</div>
+                <div class="card-tagline">${tagline}</div>
+            </div>
         </div>
-        <div class="cmeta">
-            ${dist?`<div class="mrow">📍 ${dist}</div>`:''}
-            ${edu?`<div class="mrow">🎓 ${edu}</div>`:''}
-            ${age?`<div class="mrow">🎂 বয়স: ${age}</div>`:''}
+        <div class="card-body">
+            <div class="info-grid">
+                <div class="info-item"><div class="info-lbl">📞 মোবাইল</div><div class="info-val">${phone}</div></div>
+                <div class="info-item"><div class="info-lbl">📍 ঠিকানা</div><div class="info-val">${addr}</div></div>
+                <div class="info-item"><div class="info-lbl">🎓 শেষ শিক্ষা</div><div class="info-val">${lastEdu||'—'}</div></div>
+                <div class="info-item"><div class="info-lbl">🏫 প্রতিষ্ঠান</div><div class="info-val">${lastInst||'—'}</div></div>
+                ${wOrg?`<div class="info-item"><div class="info-lbl">🏢 কর্মক্ষেত্র</div><div class="info-val">${wOrg}</div></div>`:''}
+                ${byear?`<div class="info-item"><div class="info-lbl">🎂 জন্মসাল</div><div class="info-val">${byear}</div></div>`:''}
+            </div>
+            ${about?`<div class="card-about">${about}</div>`:''}
+            <div class="card-tags">
+                ${lastEdu?`<span class="tag">${lastEdu}</span>`:''}
+                ${wTitle?`<span class="tag">${wTitle}</span>`:''}
+                ${dist?`<span class="tag">📍${dist}</span>`:''}
+                ${religion?`<span class="tag">${religion}</span>`:''}
+            </div>
         </div>
-        <div class="ctags">
-            ${prof?`<span class="tag">${prof}</span>`:''}
-            ${dist?`<span class="tag">${dist}</span>`:''}
-        </div>
-        <button class="btn bcrd" onclick="requireLogin()">সম্পূর্ণ প্রোফাইল দেখুন →</button>`;
+        <div class="card-footer">
+            <button class="btn btn-card" onclick="requireLogin()">👁️ সম্পূর্ণ প্রোফাইল</button>
+            <button class="btn btn-card" onclick="copyPhone('${phone}')">📋 নম্বর কপি</button>
+        </div>`;
         g.appendChild(c);
     });
 }
 
-function renderEmpty(msg){document.getElementById('grid').innerHTML=`<div class="empty"><div class="eico">📭</div><p>${msg}</p></div>`;}
-function requireLogin(){toast('প্রোফাইল দেখতে লগইন করুন।','info');openModal('login-modal');}
+function copyPhone(phone){
+    if(phone==='—'){toast('ফোন নম্বর পাওয়া যায়নি।','error');return;}
+    navigator.clipboard.writeText(phone).then(()=>toast('নম্বর কপি হয়েছে: '+phone,'success')).catch(()=>toast(phone,'info'));
+}
 
+function renderEmpty(msg){document.getElementById('grid').innerHTML=`<div class="empty"><div class="eico">📭</div><p>${msg}</p></div>`;}
+function requireLogin(){toast('লগইন করুন প্রোফাইল দেখতে।','info');openModal('login-modal');}
+
+// ── Filter & Search ──
 function filterBiodatas(){
     const q=document.getElementById('si').value.toLowerCase().trim();
     const f=allBiodatas.filter(item=>{
-        const n=(item.Name||item.name||'').toLowerCase();
-        const p=(item.Profession||item.profession||'').toLowerCase();
-        const d=(item.District||item.district||'').toLowerCase();
-        return(!q||n.includes(q)||p.includes(q)||d.includes(q))&&(curFilter==='all'||p.includes(curFilter));
+        const s=item._searchStr||(
+            [item.Name,item.Last_Education,item.Last_Institution,
+             item.Last_Work_Title,item.Last_Work_Org,item.District,item.Upazila].join(' ').toLowerCase()
+        );
+        const mQ=!q||s.includes(q);
+        const mT=curF==='all'||s.includes(curF);
+        return mQ&&mT;
     });
     renderCards(f);
 }
-function switchTab(el,f){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');curFilter=f;filterBiodatas();}
+function switchTab(el,f){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');curF=f;filterBiodatas();}
 
+// ── Modal ──
 function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 function bgClose(e,id){if(e.target===document.getElementById(id))closeModal(id);}
